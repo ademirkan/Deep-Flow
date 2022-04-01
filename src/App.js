@@ -1,17 +1,14 @@
-import Top from "./components/top";
-import Main from "./components/MainContent/main";
-import Bottom from "./components/bottom";
-import "./css/App.css";
+import "./App.css";
+import Footer from "./Components/Layout/Footer/Footer";
+import MainContent from "./Components/Layout/MainContent/MainContent";
+import NavBar from "./Components/Layout/NavBar/NavBar";
 
 function App() {
   return (
     <div id="display">
-      <div id="banner" />
-      <div id="main-layout">
-        <Top />
-        <Main />
-        <Bottom />
-      </div>
+      <NavBar />
+      <MainContent />
+      <Footer />
     </div>
   );
 }
