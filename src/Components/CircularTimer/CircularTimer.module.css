@@ -1,0 +1,27 @@
+/* Grid for the inside of the circle -- FIX SCALING ERROR, size% */
+#innerUI {
+  position: absolute;
+
+  aspect-ratio: 1;
+  width: 63.7%;
+  height: 10rem;
+
+  display: grid;
+  grid-template-areas:
+    "timer"
+    "control-bar";
+  grid-template-rows: auto 50px;
+}
+
+#controlBar {
+  grid-area: control-bar;
+  position: relative;
+}
+
+#backgroundCircle {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 15px 15px 30px #dedede, -15px -15px 30px #ffffff;
+}

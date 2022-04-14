@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .control-button {
+    @apply flex justify-center cursor-pointer;
+  }
+
+  .control-icon {
+    @apply h-16 w-16 p-4 text-secondary transition-colors hover:text-primary text-2xl;
+  }
+}
+
+/*
+.control-icon {
+  height: 4rem;
+  width: 4rem;
+  padding: 1rem;
+  transition: fill 0.2s ease;
+  color: var(--secondary-color);
+}
+*/

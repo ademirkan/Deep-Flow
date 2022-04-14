@@ -1,0 +1,18 @@
+#footer {
+  grid-area: footer;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.icon {
+  height: 2rem;
+  width: 2rem;
+  padding: 0.5rem;
+  transition: fill 0.2s ease;
+  fill: var(--secondary-color);
+}
+
+.icon:hover {
+  fill: var(--primary-color);
+}
