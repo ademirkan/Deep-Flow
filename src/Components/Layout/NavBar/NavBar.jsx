@@ -1,4 +1,5 @@
 import styles from "./NavBar.module.css";
+import Config from "./Config";
 import {
   ChartIcon,
   TimerIcon,
@@ -45,10 +46,6 @@ function Menu() {
       </a>
     </div>
   );
-}
-
-function Config() {
-  return <div id={styles.config}>Config</div>;
 }
 
 export default NavBar;

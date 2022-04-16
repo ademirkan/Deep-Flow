@@ -8,7 +8,7 @@ function MainContent() {
       <div className="timer-container centered-container">
         <CircularTimer
           thickness={0.03}
-          duration={1 * 1000 * 60}
+          duration={25 * 1000 * 60}
         ></CircularTimer>
       </div>
     </div>

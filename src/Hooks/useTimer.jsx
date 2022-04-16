@@ -1,30 +1,5 @@
 import { faBuildingShield } from "@fortawesome/free-solid-svg-icons";
-import { useRef, useEffect } from "react";
-import useState from "react-usestateref";
-
-// Function vs inline function.
-// If I pass a callback function as an argument, what will "this" be in that function
-// If I pass a callback function to timer.onFinish(callback, "this = timer"),
-// will this point to an out of date timer object? (closure?)
-
-// What should I be able to do with useTimer?
-// timer = useTimer(object options)
-// options --
-// onEnd
-// onStart
-// onTick
-// onPause
-// onFinish
-// bool overtime
-// tickInterval -- how long one tick takes -- 1000 = one second, 0 equals as fast as possible
-
-// functions --
-// timer.start(int seconds, bool overtime)
-// stop()
-// pause()
-// restart(int seconds, bool automatic)
-// getTime()
-// isRunning()
+import { useRef, useEffect, useState } from "react";
 
 // imparative vs declarative
 
@@ -37,14 +12,16 @@ function useTimer(duration, options = {}) {
   const lastUpdateRef = useRef(null);
   const callbacksRef = useRef({
     onStart: options.onStart,
-    onEnd: options.onEnd,
+    onFinish: options.onFinish,
     onTick: options.onTick,
+    onStop: options.onStop,
+    onReset: options.onReset,
   });
 
   // Constants
   const EVENTS = { start: 0, stop: 1, pause: 2, reset: 3, tick: 4 };
 
-  // Options -- onStart, onEnd, onTick, onPause, onFinish, tickInterval
+  // Options -- onStart, onTick, onStop, onFinish, onReset, tickInterval
   const { tickInterval = 1000 } = options;
 
   // Toggle the timer on and off when isRunning is changed
@@ -53,9 +30,6 @@ function useTimer(duration, options = {}) {
     if (isRunning) {
       interval = setInterval(tick, tickInterval);
     }
-
-    // Calls onStart callback
-    callbacksRef.current.onStart();
 
     // is called next time isRunning changes
     return () => {
@@ -66,8 +40,10 @@ function useTimer(duration, options = {}) {
   useEffect(() => {
     callbacksRef.current = {
       onStart: options.onStart,
-      onEnd: options.onEnd,
+      onFinish: options.onFinish,
       onTick: options.onTick,
+      onStop: options.onStop,
+      onReset: options.onReset,
     };
   }, [options.onStart, options.onEnd, options.onTick]);
 
@@ -115,10 +91,11 @@ function useTimer(duration, options = {}) {
 
   function stop() {
     setIsRunning(false);
-    // callbacksRef.current.onStop();
+    callbacksRef.current.onStop();
   }
 
   function reset() {
+    callbacksRef.current.onReset();
     setIsRunning(false);
     setTime(0);
   }

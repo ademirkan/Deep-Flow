@@ -4,20 +4,18 @@ import useTimer from "../../Hooks/useTimer";
 import styles from "./CircularTimer.module.css";
 import ControlBar from "./ControlBar";
 
-function CircularTimer({ thickness = 0.1, duration}) {
+function CircularTimer({ thickness = 0.1, duration }) {
   // Initialize useTimer hook
-
 
   const timer = useTimer(duration, {
     onStart: () => {
-      console.log("started!");
+      console.log("Started!");
     },
     onTick: () => {
-      console.log("tick!");
+      console.log("Tick!");
     },
     onFinish: () => {
       console.log("Finished!");
-    
     },
     onReset: () => {
       console.log("Reset!");
