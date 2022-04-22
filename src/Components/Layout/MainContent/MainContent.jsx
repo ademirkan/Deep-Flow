@@ -19,21 +19,27 @@ function MainContent() {
   const [currSession, setCurrSession] = useState(SESSION_MODE.STUDY);
 
   // Refs
-  const currDurationRef = useRef(studyDurationMs);
+  const [duration, setDuration] = useState(studyDurationMs);
 
   // Effects
   useLayoutEffect(() => {
     switch (currSession) {
       case SESSION_MODE.STUDY:
-        currDurationRef.current = studyDurationMs;
+        setDuration(studyDurationMs);
         break;
       case SESSION_MODE.SHORT_BREAK:
-        currDurationRef.current = shortBreakDurationMs;
+        setDuration(shortBreakDurationMs);
         break;
       default:
-        currDurationRef.current = longBreakDurationMs;
+        setDuration(longBreakDurationMs);
     }
-  }, [currSession, studyDurationMs, shortBreakDurationMs, longBreakDurationMs]);
+  }, [
+    currSession,
+    studyDurationMs,
+    shortBreakDurationMs,
+    longBreakDurationMs,
+    setDuration,
+  ]);
   // Marks current session as complete, returns next chronological session mode
   function nextSession() {
     let newNumComplete;
@@ -109,7 +115,7 @@ function MainContent() {
       <div className="timer-container centered-container">
         <CircularTimer
           thickness={0.03}
-          duration={currDurationRef.current}
+          duration={duration}
           callbacks={callbacks}
         ></CircularTimer>
       </div>
