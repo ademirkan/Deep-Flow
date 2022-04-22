@@ -8,6 +8,7 @@
   --title-color: black;
   --bg-color: #fafafa;
   --secondary-color: #b7b7b7;
+  transition: color 150ms ease-in-out;
   /* --primary-color: #d4a916;
   --title-color: #d1d0c5;
   --bg-color: #323437;
@@ -33,10 +34,6 @@ body {
   width: min(95vw, 1000px);
 }
 
-/* #timer-container .timer {
-  position: absolute;
-} */
-
 .circular-progress {
   position: absolute;
   width: 100%;
@@ -56,10 +53,22 @@ body {
 }
 
 .text-timer {
+  user-select: none;
   position: absolute;
   width: 100%;
   top: 2rem;
   text-align: center;
   font-size: 3rem;
   font-family: "Roboto Mono", monospace;
+}
+
+.hidden {
+  transition: 150ms ease-in-out;
+  opacity: 0%;
+  visibility: hidden;
+}
+
+.visible {
+  transition: opacity 150ms ease-in-out;
+  opacity: 100%;
 }

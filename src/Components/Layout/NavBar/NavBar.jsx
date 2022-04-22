@@ -1,5 +1,7 @@
 import styles from "./NavBar.module.css";
 import Config from "./Config";
+import { TimerStateContext } from "./../../../Contexts/TimerStateContext";
+import { useContext } from "react";
 import {
   ChartIcon,
   TimerIcon,
@@ -7,31 +9,28 @@ import {
   SettingsIcon,
 } from "../../../Assets/NavbarIcons";
 
-// App.css --> BEM
-// JEST/Mocha = test
-// index.jsx for each component to avoid import shenanigans
-// CSS Modules, Emotion, SCSS, Styled Components
-// TS = Type Safety
-
-//
-
 function NavBar() {
+  const { isStarted, isRunning } = useContext(TimerStateContext);
   return (
     <div id={styles.NavBar}>
-      <Logo />
-      <Menu />
-      <Config />
+      <Logo className={isRunning ? styles.focused : styles.default} />
+      <Menu className={isStarted ? "hidden" : "visible"} />
+      <Config className={isStarted ? "hidden" : "visible"} />
     </div>
   );
 }
 
-function Logo() {
-  return <div id={styles.logo}>deepflow</div>;
+function Logo({ className }) {
+  return (
+    <div id={styles.logo} className={className}>
+      deepflow
+    </div>
+  );
 }
 
-function Menu() {
+function Menu({ className }) {
   return (
-    <div id={styles.menu}>
+    <div id={styles.menu} className={className}>
       <a href="/">
         <TimerIcon className={styles.icon} />
       </a>

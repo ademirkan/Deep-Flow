@@ -17,13 +17,14 @@
 
 #config {
   font-family: "Roboto Mono", monospace;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 300;
   grid-area: config;
   color: var(--secondary-color);
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
   justify-items: end;
+  user-select: none;
 }
 
 .icon {
@@ -39,15 +40,27 @@
 }
 
 #logo {
-  font-size: 2.2rem;
+  user-select: none;
+  font-size: 2.5rem;
   padding-right: 1rem;
   font-family: "Roboto Mono", monospace;
+  transition: color 200ms ease-in-out;
+}
+
+.default {
+  color: var(--title-color);
+  font-size: 2.5rem;
+}
+
+.focused {
+  color: var(--secondary-color);
+  font-size: 2.5rem;
 }
 
 .duration {
   padding-left: 0.2rem;
   padding-right: 0.2rem;
-  transition: 250ms;
+  transition: color 150ms ease-in-out;
   cursor: pointer;
 }
 

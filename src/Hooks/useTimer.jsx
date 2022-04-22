@@ -17,9 +17,7 @@ function useTimer(duration, options = {}) {
     onStop: options.onStop,
     onReset: options.onReset,
   });
-
-  // Constants
-  const EVENTS = { start: 0, stop: 1, pause: 2, reset: 3, tick: 4 };
+  const startTimeRef = useRef(null);
 
   // Options -- onStart, onTick, onStop, onFinish, onReset, tickInterval
   const { tickInterval = 1000 } = options;
@@ -68,7 +66,8 @@ function useTimer(duration, options = {}) {
     });
 
     if (nextTime >= duration) {
-      callbacksRef.current.onFinish();
+      callbacksRef.current.onFinish(startTimeRef.current);
+      startTimeRef.current = null;
       reset();
     } else {
       callbacksRef.current.onTick();
@@ -84,6 +83,10 @@ function useTimer(duration, options = {}) {
       );
     if (isRunning) throw Error("Stopwatch is already running");
     callbacksRef.current.onStart();
+
+    if (!startTimeRef.current) {
+      startTimeRef.current = Date.now();
+    }
 
     setIsRunning(true);
     lastUpdateRef.current = new Date();
