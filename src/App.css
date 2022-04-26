@@ -72,3 +72,22 @@ body {
   transition: opacity 150ms ease-in-out;
   opacity: 100%;
 }
+
+.progress-container {
+  position: relative;
+}
+
+.tracker-circle {
+  height: 0.75rem;
+  width: 0.75rem;
+}
+
+.sessionRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.tracker-circle {
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+}
