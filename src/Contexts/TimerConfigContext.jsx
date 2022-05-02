@@ -11,7 +11,7 @@ export const TimerConfigContext = react.createContext({
   setLongBreakReq: () => {},
 });
 
-export default function TimerConfigContextProvider({ children }) {
+export default function TimerConfigProvider({ children }) {
   const [studyDurationMs, setStudyDurationMs] = useState(90 * 60 * 1000);
   const [shortBreakDurationMs, setShortBreakDurationMs] = useState(
     20 * 60 * 1000

@@ -15,6 +15,7 @@ export default function useLocalStorageState(key, init) {
   return [
     state,
     (value) => {
+      console.log("localStorageState has been set()");
       setState(value);
       localStorage.setItem(key, JSON.stringify(value));
     },

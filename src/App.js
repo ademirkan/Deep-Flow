@@ -1,8 +1,8 @@
 import "./App.css";
 import Footer from "./Layout/Footer/Footer";
-import TimerPage from "./Layout/TimerPage/TimerPage";
+import TimerPage from "./Pages/TimerPage/TimerPage";
 import NavBar from "./Layout/NavBar/NavBar";
-import TimerConfigContextProvider from "./Contexts/TimerConfigContext";
+import TimerConfigProvider from "./Contexts/TimerConfigContext";
 import TimerStateProvider from "./Contexts/TimerStateContext";
 
 import SessionsProvider from "./Contexts/SessionsContext";
@@ -17,17 +17,17 @@ function App() {
   // }
 
   return (
-    <SessionsProvider>
-      <TimerStateProvider>
-        <TimerConfigContextProvider>
+    <TimerStateProvider>
+      <TimerConfigProvider>
+        <SessionsProvider>
           <div id="display">
             <NavBar />
             <TimerPage />
             <Footer />
           </div>
-        </TimerConfigContextProvider>
-      </TimerStateProvider>
-    </SessionsProvider>
+        </SessionsProvider>
+      </TimerConfigProvider>
+    </TimerStateProvider>
   );
 }
 

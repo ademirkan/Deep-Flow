@@ -9,10 +9,14 @@ import usePomodoroScheduler from "./../../Hooks/usePomodoroScheduler";
 import { SessionsContext } from "./../../Contexts/SessionsContext";
 
 export default function Timer() {
+  // Contexts
   const { setIsRunning, setIsStarted } = useContext(TimerStateContext);
   const { sessions, setSessions } = useContext(SessionsContext);
 
+  // Study Schedule Handler
   const scheduler = usePomodoroScheduler();
+
+  // Timer callbacks
   let callbacks = {
     onStart: () => {
       setIsRunning(true);
@@ -23,7 +27,7 @@ export default function Timer() {
     },
     onFinish: (startTime) => {
       console.log("Finish");
-      let prevSessions = sessions;
+      let prevSessions = [...sessions];
       prevSessions.push({
         startTime: startTime,
         endTime: Date.now(),
@@ -69,7 +73,6 @@ function CircularTimer({ thickness = 0.1, duration, callbacks }) {
   let remainingTime = duration - timer.time;
   return (
     <>
-      {/* <div id={styles.backgroundCircle}></div> */}
       <CircularProgress
         percentFilled={
           timer.isRunning
