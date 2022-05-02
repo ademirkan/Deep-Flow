@@ -7,9 +7,11 @@ import { useState } from "react";
  * @returns
  */
 export default function useLocalStorageState(key, init) {
+  // if exists in local storage, use that. Else, use init.
+  let currValueString = localStorage.getItem(key);
+  init = currValueString ? JSON.parse(currValueString) : init;
+
   const [state, setState] = useState(init);
-  console.log("IN HHOOK");
-  console.log(init);
   return [
     state,
     (value) => {

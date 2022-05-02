@@ -19,7 +19,7 @@ export default function TimerConfigContextProvider({ children }) {
   const [longBreakDurationMs, setLongBreakDurationMs] = useState(
     45 * 60 * 1000
   );
-  const [longBreakReq, setLongBreakReq] = useState(2);
+  const [longBreakReq, setLongBreakReq] = useState(4);
 
   return (
     <TimerConfigContext.Provider

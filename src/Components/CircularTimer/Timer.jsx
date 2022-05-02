@@ -4,24 +4,57 @@ import useTimer from "../../Hooks/useTimer";
 import styles from "./CircularTimer.module.css";
 import ControlBar from "./ControlBar";
 import { useContext } from "react";
-import { TimerConfigContext } from "./../../Contexts/TimerConfigContext";
 import { TimerStateContext } from "./../../Contexts/TimerStateContext";
+import usePomodoroScheduler from "./../../Hooks/usePomodoroScheduler";
+import { SessionsContext } from "./../../Contexts/SessionsContext";
 
 export default function Timer() {
-  const {
-    studyDurationMs,
-    shortBreakDurationMs,
-    longBreakDurationMs,
-    longBreakReq,
-  } = useContext(TimerConfigContext);
-
   const { setIsRunning, setIsStarted } = useContext(TimerStateContext);
+  const { sessions, setSessions } = useContext(SessionsContext);
+
+  const scheduler = usePomodoroScheduler();
+  let callbacks = {
+    onStart: () => {
+      setIsRunning(true);
+      setIsStarted(true);
+    },
+    onTick: () => {
+      console.log("Tick!");
+    },
+    onFinish: (startTime) => {
+      console.log("Finish");
+      let prevSessions = sessions;
+      prevSessions.push({
+        startTime: startTime,
+        endTime: Date.now(),
+        mode: scheduler.currentMode,
+      });
+      setSessions(prevSessions);
+
+      setIsRunning(false);
+      setIsStarted(false);
+      scheduler.next();
+    },
+    onReset: () => {
+      console.log("Reset!");
+      setIsRunning(false);
+      setIsStarted(false);
+    },
+    onStop: () => {
+      console.log("Stopped!");
+      setIsRunning(false);
+    },
+    onNext: () => {
+      console.log("Next");
+      scheduler.next();
+    },
+  };
 
   return (
     <div className="timer-container flex justify-center items-center">
       <CircularTimer
         thickness={0.03}
-        duration={duration}
+        duration={scheduler.duration}
         callbacks={callbacks}
       />
     </div>
