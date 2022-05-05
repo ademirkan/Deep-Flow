@@ -16,6 +16,7 @@ function useTimer(duration, options = {}) {
     onTick: options.onTick,
     onStop: options.onStop,
     onReset: options.onReset,
+    onNext: options.onNext,
   });
   const startTimeRef = useRef(null);
 
@@ -42,6 +43,7 @@ function useTimer(duration, options = {}) {
       onTick: options.onTick,
       onStop: options.onStop,
       onReset: options.onReset,
+      onNext: options.onNext,
     };
   }, [options.onStart, options.onEnd, options.onTick]);
 
@@ -97,13 +99,18 @@ function useTimer(duration, options = {}) {
     callbacksRef.current.onStop();
   }
 
+  function next() {
+    setIsRunning(false);
+    callbacksRef.current.onNext();
+  }
+
   function reset() {
     callbacksRef.current.onReset();
     setIsRunning(false);
     setTime(0);
   }
 
-  return { time, isRunning, start, stop, reset };
+  return { time, isRunning, start, stop, reset, next };
 }
 
 export default useTimer;

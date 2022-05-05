@@ -22,7 +22,16 @@ function NavBar() {
 
 function Logo({ className }) {
   return (
-    <div id={styles.logo} className={className}>
+    <div
+      id={styles.logo}
+      className={className}
+      onClick={() => {
+        console.log("Logo clicked, clearing storage");
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.reload(false);
+      }}
+    >
       deepflow
     </div>
   );

@@ -91,3 +91,21 @@ body {
   margin-left: 0.2rem;
   margin-right: 0.2rem;
 }
+
+.icon {
+}
+
+.setting-grid {
+  display: grid;
+  grid-area: "title title" "description options";
+  row-gap: 10px;
+  column-gap: 20px;
+}
+
+.setting-grid > .description {
+  grid-area: description;
+}
+
+.setting-grid > .options {
+  grid-area: options;
+}

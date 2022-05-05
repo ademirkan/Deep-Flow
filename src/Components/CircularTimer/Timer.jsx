@@ -49,7 +49,9 @@ export default function Timer() {
       setIsRunning(false);
     },
     onNext: () => {
-      console.log("Next");
+      console.log("Next, progress will not be counted");
+      setIsRunning(false);
+      setIsStarted(false);
       scheduler.next();
     },
   };
@@ -88,6 +90,7 @@ function CircularTimer({ thickness = 0.1, duration, callbacks }) {
           isRunning={timer.isRunning}
           handleStart={timer.start}
           handleStop={timer.stop}
+          handleNext={timer.next}
           handleReset={timer.reset}
         />
       </div>

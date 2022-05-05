@@ -3,6 +3,8 @@ import { useContext, useEffect } from "react";
 import { TimerConfigContext } from "./../../Contexts/TimerConfigContext";
 import { SessionsContext } from "./../../Contexts/SessionsContext";
 import { isDateToday } from "./../../Helpers/checkDate";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
 
 export default function Progress() {
   // const [sessions, setSessions] = useLocalStorageState("sessions", []);
@@ -13,20 +15,14 @@ export default function Progress() {
   useEffect(() => {
     if (
       sessions.length !== 0 &&
-      !isDateToday(new Date(sessions[0].studyTime))
+      !isDateToday(new Date(sessions[0].startTime))
     ) {
-      console.log(
-        "Is from today: " + isDateToday(new Date(sessions[0].studyTime))
-      );
-      console.log("RESETING");
-      console.log(sessions[0]);
-      console.log(new Date(sessions[0].endTime));
       setSessions([]);
     }
   }, []);
 
   return (
-    <div className="progress-container w-72 mt-10">
+    <div className="progress-container flex flex-col items-center w-72 mt-10">
       <ProgressBar
         target={8}
         completed={sessions.reduce(
