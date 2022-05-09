@@ -4,7 +4,6 @@ import { TimerConfigContext } from "./../../Contexts/TimerConfigContext";
 import { SessionsContext } from "./../../Contexts/SessionsContext";
 import { isDateToday } from "./../../Helpers/checkDate";
 import Popup from "reactjs-popup";
-import "reactjs-popup/dist/index.css";
 
 export default function Progress() {
   // const [sessions, setSessions] = useLocalStorageState("sessions", []);

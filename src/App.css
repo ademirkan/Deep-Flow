@@ -8,7 +8,9 @@
   --title-color: black;
   --bg-color: #fafafa;
   --secondary-color: #b7b7b7;
+  --popup-background: rgba(0, 0, 0, 0.5);
   transition: color 150ms ease-in-out;
+  font-family: "Robotomono", monospace;
   /* --primary-color: #d4a916;
   --title-color: #d1d0c5;
   --bg-color: #323437;
@@ -95,17 +97,30 @@ body {
 .icon {
 }
 
-.setting-grid {
-  display: grid;
-  grid-area: "title title" "description options";
-  row-gap: 10px;
-  column-gap: 20px;
+/* Popup styling */
+.popup-content {
+  margin: auto;
+  background: var(--bg-color);
+  width: min(80%, 500px);
+  padding: 2rem;
+  border-radius: 0.75rem;
 }
 
-.setting-grid > .description {
-  grid-area: description;
+.popup-arrow {
+  color: rgb(255, 255, 255);
+}
+[role="tooltip"].popup-content {
+  width: 200px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
 }
 
-.setting-grid > .options {
-  grid-area: options;
+.popup-overlay {
+  background: var(--popup-background);
+}
+[data-popup="tooltip"].popup-overlay {
+  background: transparent;
+}
+
+button {
+  min-width: 30px;
 }
