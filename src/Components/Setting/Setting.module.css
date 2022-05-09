@@ -1,0 +1,45 @@
+.settingGrid {
+  display: grid;
+  margin-top: 10px;
+  grid-template-areas: "title title" "description options";
+  column-gap: 40px;
+  font-family: "Roboto Mono", monospace;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.title {
+  grid-area: title;
+  color: var(--secondary-color);
+  font-size: 12px;
+}
+
+.description {
+  color: var(--title-color);
+  font-size: 14px;
+  grid-area: description;
+}
+
+.options {
+  grid-area: options;
+  display: flex;
+  justify-content: end;
+  align-self: center;
+  gap: 10px;
+}
+
+.button {
+  background-color: var(--secondary-color);
+  outline: none;
+  opacity: 50%;
+  font-size: small;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 5px;
+}
+
+.buttonActive {
+  outline: auto;
+
+  border-color: var(--title-color);
+}

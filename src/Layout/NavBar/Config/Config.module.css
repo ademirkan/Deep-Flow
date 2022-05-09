@@ -1,0 +1,18 @@
+#config {
+  font-family: "Roboto Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 300;
+  grid-area: config;
+  color: var(--secondary-color);
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  justify-items: end;
+  user-select: none;
+}
+
+/**/
+
+.header {
+  color: var(--secondary-color);
+  font-size: x-large;
+}
