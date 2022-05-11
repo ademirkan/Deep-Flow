@@ -8,13 +8,27 @@
   --title-color: black;
   --bg-color: #fafafa;
   --secondary-color: #b7b7b7;
+  --alt-secondary-color: #ececec;
   --popup-background: rgba(0, 0, 0, 0.5);
-  transition: color 150ms ease-in-out;
   font-family: "Robotomono", monospace;
+  user-select: none;
+
   /* --primary-color: #d4a916;
   --title-color: #d1d0c5;
   --bg-color: #323437;
   --secondary-color: #5d5f62; */
+}
+
+/* Chrome, Safari, Edge, Opera */
+.button.input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.button.input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 body {
@@ -101,7 +115,8 @@ body {
 .popup-content {
   margin: auto;
   background: var(--bg-color);
-  width: min(80%, 500px);
+  min-width: 400px;
+  width: clamp(400px, 80%, 600px);
   padding: 2rem;
   border-radius: 0.75rem;
 }
@@ -119,8 +134,4 @@ body {
 }
 [data-popup="tooltip"].popup-overlay {
   background: transparent;
-}
-
-button {
-  min-width: 30px;
 }

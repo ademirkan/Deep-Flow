@@ -2,6 +2,7 @@
   display: grid;
   margin-top: 10px;
   grid-template-areas: "title title" "description options";
+  grid-template-columns: 10fr 7fr;
   column-gap: 40px;
   font-family: "Roboto Mono", monospace;
   margin-top: 20px;
@@ -11,7 +12,7 @@
 .title {
   grid-area: title;
   color: var(--secondary-color);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .description {
@@ -20,8 +21,9 @@
   grid-area: description;
 }
 
-.options {
+.optionListContainer {
   grid-area: options;
+  width: 100%;
   display: flex;
   justify-content: end;
   align-self: center;
@@ -29,17 +31,29 @@
 }
 
 .button {
-  background-color: var(--secondary-color);
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  cursor: pointer;
+  background-color: var(--alt-secondary-color);
   outline: none;
-  opacity: 50%;
+
   font-size: small;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  border-radius: 5px;
+  padding: 0.3rem;
+  border-radius: 0.5rem;
+}
+
+.inputButton {
+  width: 45px;
 }
 
 .buttonActive {
-  outline: auto;
+  background-color: var(--primary-color);
+  color: var(--bg-color);
+}
 
-  border-color: var(--title-color);
+.buttonActive::placeholder {
+  color: var(--bg-color);
 }

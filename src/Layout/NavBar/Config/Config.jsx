@@ -3,10 +3,13 @@ import { useState, useContext } from "react";
 import { TimerConfigContext } from "../../../Contexts/TimerConfigContext";
 import { TimerStateContext } from "../../../Contexts/TimerStateContext";
 import Popup from "reactjs-popup";
+import { DailyTargetContext } from "./../../../Contexts/DailyTargetContext";
+
 import Setting, {
   ButtonOption,
   ButtonOptionList,
   InputOption,
+  CustomizableButtonOptionList,
 } from "../../../Components/Setting/Setting";
 
 export default function Config() {
@@ -14,10 +17,14 @@ export default function Config() {
     studyDurationMs,
     shortBreakDurationMs,
     longBreakDurationMs,
+    longBreakReq,
     setLongBreakDurationMs,
     setShortBreakDurationMs,
     setStudyDurationMs,
+    setLongBreakReq,
   } = useContext(TimerConfigContext);
+
+  const { dailyTarget, setDailyTarget } = useContext(DailyTargetContext);
 
   return (
     <Popup
@@ -31,20 +38,22 @@ export default function Config() {
         <div className={styles.modal}>
           <h1 className={styles.header}> Pomodoro configuration </h1>
 
+          {/* used to remove autofocus property*/}
+          <input type="number" autoFocus style={{ display: "none" }}></input>
           <Setting
             title="Study duration"
             description="Length of the study duration"
             actionArea={
-              <ButtonOptionList
+              <CustomizableButtonOptionList
                 options={[
                   { label: "25", value: 25 * 1000 * 60 },
                   { label: "50", value: 50 * 1000 * 60 },
-                  { label: "60", value: 60 * 1000 * 60 },
                   { label: "90", value: 90 * 1000 * 60 },
                 ]}
                 currentValue={studyDurationMs}
                 setValue={setStudyDurationMs}
-              ></ButtonOptionList>
+                toValue={(label) => parseInt(label) * 1000 * 60}
+              ></CustomizableButtonOptionList>
             }
           ></Setting>
 
@@ -52,39 +61,57 @@ export default function Config() {
             title="Short break"
             description="Length of the short break duration"
             actionArea={
-              <ButtonOptionList
+              <CustomizableButtonOptionList
                 options={[
                   { label: "5", value: 5 * 1000 * 60 },
                   { label: "10", value: 10 * 1000 * 60 },
                   { label: "15", value: 15 * 1000 * 60 },
-                  { label: "20", value: 20 * 1000 * 60 },
                 ]}
                 currentValue={shortBreakDurationMs}
                 setValue={setShortBreakDurationMs}
-              ></ButtonOptionList>
+                toValue={(label) => parseInt(label) * 1000 * 60}
+              ></CustomizableButtonOptionList>
             }
           ></Setting>
           <Setting
             title="Long break"
             description="Length of the long break duration"
             actionArea={
-              <ButtonOptionList
+              <CustomizableButtonOptionList
                 options={[
                   { label: "15", value: 15 * 1000 * 60 },
-                  { label: "20", value: 20 * 1000 * 60 },
                   { label: "30", value: 30 * 1000 * 60 },
                   { label: "45", value: 45 * 1000 * 60 },
                 ]}
                 currentValue={longBreakDurationMs}
                 setValue={setLongBreakDurationMs}
-              ></ButtonOptionList>
+                toValue={(label) => parseInt(label) * 1000 * 60}
+              ></CustomizableButtonOptionList>
             }
           ></Setting>
 
           <Setting
             title="Pomodoro cycle"
             description="Number of pomodoros required for a long break"
-            actionArea={<InputOption></InputOption>}
+            actionArea={
+              <InputOption
+                currentValue={longBreakReq}
+                setValue={(value) => {
+                  setLongBreakReq(parseInt(value));
+                }}
+              ></InputOption>
+            }
+          ></Setting>
+
+          <Setting
+            title="Daily target"
+            description="The number of pomodoros displayed on the progress bar"
+            actionArea={
+              <InputOption
+                currentValue={dailyTarget}
+                setValue={setDailyTarget}
+              ></InputOption>
+            }
           ></Setting>
           <div className="flex justify-center">
             <button

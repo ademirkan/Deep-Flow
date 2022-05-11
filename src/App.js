@@ -6,6 +6,7 @@ import TimerConfigProvider from "./Contexts/TimerConfigContext";
 import TimerStateProvider from "./Contexts/TimerStateContext";
 
 import SessionsProvider from "./Contexts/SessionsContext";
+import DailyTargetProvider from "./Contexts/DailyTargetContext";
 
 function App() {
   // const prevSessionsString = localStorage.getItem("sessions"); // get sessions data as JSON string
@@ -20,11 +21,13 @@ function App() {
     <TimerStateProvider>
       <TimerConfigProvider>
         <SessionsProvider>
-          <div id="display">
-            <NavBar />
-            <TimerPage />
-            <Footer />
-          </div>
+          <DailyTargetProvider>
+            <div id="display">
+              <NavBar />
+              <TimerPage />
+              <Footer />
+            </div>
+          </DailyTargetProvider>
         </SessionsProvider>
       </TimerConfigProvider>
     </TimerStateProvider>

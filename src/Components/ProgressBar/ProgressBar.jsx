@@ -4,11 +4,13 @@ import { TimerConfigContext } from "./../../Contexts/TimerConfigContext";
 import { SessionsContext } from "./../../Contexts/SessionsContext";
 import { isDateToday } from "./../../Helpers/checkDate";
 import Popup from "reactjs-popup";
+import { DailyTargetContext } from "./../../Contexts/DailyTargetContext";
 
 export default function Progress() {
   // const [sessions, setSessions] = useLocalStorageState("sessions", []);
   const { sessions, setSessions } = useContext(SessionsContext);
   const { longBreakReq } = useContext(TimerConfigContext);
+  const { dailyTarget } = useContext(DailyTargetContext);
 
   // clear session history at the start of a new day
   useEffect(() => {
@@ -23,7 +25,7 @@ export default function Progress() {
   return (
     <div className="progress-container flex flex-col items-center w-72 mt-10">
       <ProgressBar
-        target={8}
+        target={dailyTarget}
         completed={sessions.reduce(
           (sum, session) =>
             session.mode === SESSION_MODE.STUDY ? sum + 1 : sum,
