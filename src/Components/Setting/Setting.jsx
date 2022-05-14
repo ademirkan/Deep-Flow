@@ -5,8 +5,8 @@ import { useState } from "react";
 
 /**
  * Setting
- *    ButtonOptionList
  *    CustomizableButtonOptionList
+ *    ButtonOptionList
  *    InputOption
  */
 export default function Setting({ title, description, actionArea }) {
@@ -19,9 +19,6 @@ export default function Setting({ title, description, actionArea }) {
   );
 }
 
-/**
- * Todo:
- */
 export function ButtonOptionList({ options, currentValue, setValue }) {
   return (
     <>
@@ -39,10 +36,53 @@ export function ButtonOptionList({ options, currentValue, setValue }) {
   );
 }
 
+/**
+ * options, currentValue, setValue, toValue
+ */
+export function CustomizableButtonOptionList({
+  options,
+  currentValue,
+  setValue,
+  toValue = (e) => e,
+}) {
+  const [activeIndex, setActiveIndex] = useState(
+    options.findIndex((option) => option.value === currentValue)
+  );
+
+  function handleClick(i) {
+    setActiveIndex(i);
+  }
+
+  return (
+    <>
+      {options.map((option, i) => {
+        return (
+          <ButtonOption
+            isActive={i === activeIndex}
+            onClick={() => handleClick(i)}
+          >
+            {option.label}
+          </ButtonOption>
+        );
+      })}
+      <InputOption
+        placeholder={"custom"}
+        setValue={(value) => {
+          setValue(toValue(parseInt(value)));
+        }}
+        isActive={activeIndex === -1}
+        onFocus={() => {
+          setActiveIndex(-1);
+        }}
+      ></InputOption>
+    </>
+  );
+}
+
 export function ButtonOption({ isActive, onClick = () => {}, children }) {
   return (
     <div
-      className={styles.button + " " + (isActive && styles.buttonActive)}
+      className={"button " + (isActive && styles.buttonActive)}
       onClick={onClick}
     >
       {children}
@@ -50,9 +90,13 @@ export function ButtonOption({ isActive, onClick = () => {}, children }) {
   );
 }
 
-export function InputOption({ currentValue, setValue }) {
-  const [active, setActive] = useState(false);
-
+export function InputOption({
+  currentValue,
+  setValue,
+  onFocus,
+  isActive,
+  placeholder,
+}) {
   function handleKeyUp(event) {
     //key code for enter
     if (event.code === "Enter") {
@@ -65,50 +109,21 @@ export function InputOption({ currentValue, setValue }) {
     <input
       type="number"
       className={
-        styles.button +
-        " " +
-        styles.inputButton +
-        " " +
-        (false && styles.buttonActive)
+        "button " + styles.inputButton + " " + (isActive && styles.buttonActive)
       }
-      placeholder={currentValue}
-      onFocus={() => {
-        setActive(true);
-      }}
-      onBlur={() => {
-        setActive(false);
+      placeholder={placeholder}
+      onFocus={(e) => {
+        // make current text into currentValue
+        e.target.value = currentValue;
+        onFocus();
       }}
       onChange={(e) => {
         if (e.target.value && e.target.value > 0) setValue(e.target.value);
       }}
       onKeyUp={handleKeyUp}
+      onBlur={(e) => (e.target.value = placeholder)}
       onWheel={(event) => event.currentTarget.blur()}
       autoFocus={false}
     ></input>
   );
 }
-
-export function CustomizableButtonOptionList({
-  options,
-  currentValue,
-  setValue,
-  toValue = (e) => e,
-}) {
-  return (
-    <>
-      <ButtonOptionList
-        options={options}
-        currentValue={currentValue}
-        setValue={setValue}
-      ></ButtonOptionList>
-      <InputOption
-        currentValue={"custom"}
-        setValue={(value) => {
-          setValue(toValue(parseInt(value)));
-        }}
-      ></InputOption>
-    </>
-  );
-}
-
-function ToggleOption({ label, value, activeValue, setValue }) {}

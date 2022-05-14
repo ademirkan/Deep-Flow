@@ -99,6 +99,7 @@ export default function Config() {
                 setValue={(value) => {
                   setLongBreakReq(parseInt(value));
                 }}
+                placeholder={longBreakReq}
               ></InputOption>
             }
           ></Setting>
@@ -110,17 +111,17 @@ export default function Config() {
               <InputOption
                 currentValue={dailyTarget}
                 setValue={setDailyTarget}
+                placeholder={dailyTarget}
               ></InputOption>
             }
           ></Setting>
           <div className="flex justify-center">
             <button
               style={{
-                borderRadius: "5px",
+                borderRadius: "0.5rem",
                 width: "100%",
-                height: "30px",
-                backgroundColor: "var(--secondary-color)",
-                opacity: "50%",
+                height: "40px",
+                backgroundColor: "var(--alt-secondary-color)",
               }}
               onClick={() => {
                 close();

@@ -1,3 +1,5 @@
+import styles from "./CircularProgress.modules.css";
+
 function CircularProgress({
   percentFilled,
   animationDuration = "1s",
@@ -6,11 +8,7 @@ function CircularProgress({
 }) {
   return (
     <>
-      <svg
-        className="circular-progress"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 100 100"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="50" fill={"var(--secondary-color"} />
         <circle
           cx="50"
@@ -25,7 +23,12 @@ function CircularProgress({
           }}
           transform="rotate(-90) translate(-100)"
         />
-        <circle cx="50" cy="50" r={50 - 50 * thickness} fill="#f5f5f5" />
+        <circle
+          cx="50"
+          cy="50"
+          r={50 - 50 * thickness}
+          fill="var(--bg-color)"
+        />
       </svg>
     </>
   );

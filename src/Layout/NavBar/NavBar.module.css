@@ -28,26 +28,11 @@
   user-select: none;
 }
 
-.icon {
-  height: 2rem;
-  width: 2rem;
-  padding: 0.5rem;
-  transition: fill 0.2s ease;
-  fill: var(--secondary-color);
-}
-
-.icon:hover {
-  fill: var(--primary-color);
-}
-
-#logo {
+.logo {
   user-select: none;
   padding-right: 1rem;
   font-family: "Roboto Mono", monospace;
   transition: 150ms ease-in-out;
-}
-
-.default {
   color: var(--title-color);
   font-size: 2rem;
 }

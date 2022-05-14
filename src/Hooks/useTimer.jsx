@@ -101,6 +101,7 @@ function useTimer(duration, options = {}) {
 
   function next() {
     setIsRunning(false);
+    setTime(0);
     callbacksRef.current.onNext();
   }
 

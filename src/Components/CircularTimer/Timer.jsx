@@ -1,5 +1,4 @@
-import CircularProgress from "./CircularProgress";
-import TextTimer from "../TextTimer";
+import CircularProgress from "./CircularProgress/CircularProgress";
 import useTimer from "../../Hooks/useTimer";
 import styles from "./CircularTimer.module.css";
 import ControlBar from "./ControlBar";
@@ -7,6 +6,7 @@ import { useContext } from "react";
 import { TimerStateContext } from "./../../Contexts/TimerStateContext";
 import usePomodoroScheduler from "./../../Hooks/usePomodoroScheduler";
 import { SessionsContext } from "./../../Contexts/SessionsContext";
+import { formatTime } from "./../../Helpers/formatTime";
 
 export default function Timer() {
   // Contexts
@@ -57,7 +57,7 @@ export default function Timer() {
   };
 
   return (
-    <div className="timer-container flex justify-center items-center">
+    <div className={styles.timerContainer}>
       <CircularTimer
         thickness={0.03}
         duration={scheduler.duration}
@@ -85,7 +85,10 @@ function CircularTimer({ thickness = 0.1, duration, callbacks }) {
         animationDuration={timer.isRunning ? "1s" : "0.15s"}
       />
       <div id={styles.innerUI}>
-        <TextTimer seconds={remainingTime / 1000}></TextTimer>
+        <TextTimer
+          seconds={remainingTime / 1000}
+          style={{ color: "var(--title-color)" }}
+        ></TextTimer>
         <ControlBar
           isRunning={timer.isRunning}
           handleStart={timer.start}
@@ -95,5 +98,13 @@ function CircularTimer({ thickness = 0.1, duration, callbacks }) {
         />
       </div>
     </>
+  );
+}
+
+function TextTimer({ seconds, style = {} }) {
+  return (
+    <div className={styles.textTimer} style={style}>
+      {formatTime(seconds)}
+    </div>
   );
 }

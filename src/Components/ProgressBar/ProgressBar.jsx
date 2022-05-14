@@ -23,7 +23,7 @@ export default function Progress() {
   }, []);
 
   return (
-    <div className="progress-container flex flex-col items-center w-72 mt-10">
+    <div className="relative flex flex-col items-center w-72 mt-10">
       <ProgressBar
         target={dailyTarget}
         completed={sessions.reduce(
@@ -57,13 +57,14 @@ function ProgressBar({ target, completed, longReq }) {
 }
 
 function SessionRow({ numCircles, numComplete }) {
+  const circleStyle = "h-3 w-3 mx-0.5";
   return (
     <div className="flex flex-row mx-3 my-2">
       {[...Array(numComplete)].map((_, i) => {
         return (
           <svg
             key={i}
-            className="tracker-circle"
+            className={circleStyle}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 100 100"
           >
@@ -75,7 +76,7 @@ function SessionRow({ numCircles, numComplete }) {
         return (
           <svg
             key={i}
-            className="tracker-circle"
+            className={circleStyle}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 100 100"
           >

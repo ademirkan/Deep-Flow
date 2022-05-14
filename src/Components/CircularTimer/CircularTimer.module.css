@@ -1,4 +1,23 @@
-/* Grid for the inside of the circle -- FIX SCALING ERROR, size% */
+.timerContainer {
+  position: relative;
+  height: min(300px, 100%);
+  width: min(300px, 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.textTimer {
+  user-select: none;
+  position: absolute;
+  width: 100%;
+  top: 2rem;
+  text-align: center;
+  font-size: 3rem;
+  font-family: "Roboto Mono", monospace;
+}
+
+/* Grid for the inside of the circle */
 #innerUI {
   position: absolute;
 

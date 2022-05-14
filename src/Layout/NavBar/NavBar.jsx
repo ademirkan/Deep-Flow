@@ -13,7 +13,7 @@ function NavBar() {
   const { isStarted, isRunning } = useContext(TimerStateContext);
   return (
     <div id={styles.NavBar}>
-      <Logo className={isRunning ? styles.focused : styles.default} />
+      <Logo className={isRunning && styles.focused} />
       <Menu className={isStarted ? "hidden" : "visible"} />
       <Config className={isStarted ? "hidden" : "visible"} />
     </div>
@@ -23,8 +23,7 @@ function NavBar() {
 function Logo({ className }) {
   return (
     <div
-      id={styles.logo}
-      className={className}
+      className={styles.logo + " " + className}
       onClick={() => {
         console.log("Logo clicked, clearing storage");
         localStorage.clear();
@@ -41,16 +40,16 @@ function Menu({ className }) {
   return (
     <div id={styles.menu} className={className}>
       <a href="/">
-        <TimerIcon className={styles.icon} />
+        <TimerIcon className={"icon"} />
       </a>
       <a href="/">
-        <ChartIcon className={styles.icon} />
+        <ChartIcon className={"icon"} />
       </a>
       <a href="/">
-        <ShareIcon className={styles.icon} />
+        <ShareIcon className={"icon"} />
       </a>
       <a href="/">
-        <SettingsIcon className={styles.icon} />
+        <SettingsIcon className={"icon"} />
       </a>
     </div>
   );

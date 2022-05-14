@@ -30,21 +30,6 @@
   gap: 10px;
 }
 
-.button {
-  min-height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-grow: 1;
-  cursor: pointer;
-  background-color: var(--alt-secondary-color);
-  outline: none;
-
-  font-size: small;
-  padding: 0.3rem;
-  border-radius: 0.5rem;
-}
-
 .inputButton {
   width: 45px;
 }

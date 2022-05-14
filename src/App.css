@@ -4,31 +4,25 @@
   box-sizing: border-box;
 }
 :root {
+  /*White theme*/
   --primary-color: #e61d1d;
   --title-color: black;
   --bg-color: #fafafa;
   --secondary-color: #b7b7b7;
   --alt-secondary-color: #ececec;
   --popup-background: rgba(0, 0, 0, 0.5);
+
+  /*Dark theme */
+  /*
+  --primary-color: #ec4c56;
+  --title-color: #f6f0e9;
+  --bg-color: #242933;
+  --secondary-color: #596172;
+  --alt-secondary-color: #1c222d;
+  --popup-background: rgba(0, 0, 0, 0.5);
+  */
   font-family: "Robotomono", monospace;
   user-select: none;
-
-  /* --primary-color: #d4a916;
-  --title-color: #d1d0c5;
-  --bg-color: #323437;
-  --secondary-color: #5d5f62; */
-}
-
-/* Chrome, Safari, Edge, Opera */
-.button.input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-.button.input[type="number"] {
-  -moz-appearance: textfield;
 }
 
 body {
@@ -50,34 +44,14 @@ body {
   width: min(95vw, 1000px);
 }
 
-.circular-progress {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
+/* depracate, use tailwind*/
 .centered-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.timer-container {
-  position: relative;
-  height: min(300px, 100%);
-  width: min(300px, 100%);
-}
-
-.text-timer {
-  user-select: none;
-  position: absolute;
-  width: 100%;
-  top: 2rem;
-  text-align: center;
-  font-size: 3rem;
-  font-family: "Roboto Mono", monospace;
-}
-
+/* opacity transitions */
 .hidden {
   transition: 150ms ease-in-out;
   opacity: 0%;
@@ -89,13 +63,31 @@ body {
   opacity: 100%;
 }
 
-.progress-container {
-  position: relative;
+.button {
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  cursor: pointer;
+  background-color: var(--alt-secondary-color);
+  outline: none;
+
+  font-size: small;
+  padding: 0.3rem;
+  border-radius: 0.5rem;
 }
 
-.tracker-circle {
-  height: 0.75rem;
-  width: 0.75rem;
+.icon {
+  height: 2.15rem;
+  width: 2.15rem;
+  padding: 0.5rem;
+  transition: fill 0.2s ease;
+  fill: var(--secondary-color);
+}
+
+.icon:hover {
+  fill: var(--primary-color);
 }
 
 .sessionRow {
@@ -103,15 +95,7 @@ body {
   flex-direction: row;
 }
 
-.tracker-circle {
-  margin-left: 0.2rem;
-  margin-right: 0.2rem;
-}
-
-.icon {
-}
-
-/* Popup styling */
+/*   P O P U P   S T Y L I N G   */
 .popup-content {
   margin: auto;
   background: var(--bg-color);
@@ -134,4 +118,16 @@ body {
 }
 [data-popup="tooltip"].popup-overlay {
   background: transparent;
+}
+
+/* Removes number input scrollbar */
+.button.input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Same, but for Firefox */
+.button.input[type="number"] {
+  -moz-appearance: textfield;
 }
