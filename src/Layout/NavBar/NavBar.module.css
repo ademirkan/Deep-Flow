@@ -37,7 +37,7 @@
   font-size: 2rem;
 }
 
-.focused {
+.focusedLogo {
   color: var(--secondary-color);
   font-size: 2rem !important;
 }

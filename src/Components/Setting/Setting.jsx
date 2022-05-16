@@ -26,7 +26,9 @@ export function ButtonOptionList({ options, currentValue, setValue }) {
         return (
           <ButtonOption
             isActive={option.value === currentValue}
-            onClick={() => setValue(option.value)}
+            onClick={() => {
+              setValue(option.value);
+            }}
           >
             {option.label}
           </ButtonOption>
@@ -50,7 +52,13 @@ export function CustomizableButtonOptionList({
   );
 
   function handleClick(i) {
+    console.log(i);
     setActiveIndex(i);
+
+    // if it is not inputOption, set the value on click
+    if (i !== -1) {
+      setValue(options[i].value);
+    }
   }
 
   return (
@@ -71,9 +79,7 @@ export function CustomizableButtonOptionList({
           setValue(toValue(parseInt(value)));
         }}
         isActive={activeIndex === -1}
-        onFocus={() => {
-          setActiveIndex(-1);
-        }}
+        onFocus={() => handleClick(-1)}
       ></InputOption>
     </>
   );

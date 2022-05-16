@@ -13,7 +13,7 @@ function NavBar() {
   const { isStarted, isRunning } = useContext(TimerStateContext);
   return (
     <div id={styles.NavBar}>
-      <Logo className={isRunning && styles.focused} />
+      <Logo className={isRunning && styles.focusedLogo} />
       <Menu className={isStarted ? "hidden" : "visible"} />
       <Config className={isStarted ? "hidden" : "visible"} />
     </div>
@@ -21,19 +21,7 @@ function NavBar() {
 }
 
 function Logo({ className }) {
-  return (
-    <div
-      className={styles.logo + " " + className}
-      onClick={() => {
-        console.log("Logo clicked, clearing storage");
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.reload(false);
-      }}
-    >
-      deepflow
-    </div>
-  );
+  return <div className={styles.logo + " " + className}>deepflow</div>;
 }
 
 function Menu({ className }) {
