@@ -10,6 +10,14 @@
   user-select: none;
 }
 
+.configOption {
+  font-size: 0.7rem;
+  line-height: 0.5rem;
+  padding: 0 0.25rem;
+}
+.configOptionActive {
+  color: var(--primary-color);
+}
 .header {
   color: var(--secondary-color);
   font-size: xx-large;

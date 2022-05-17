@@ -4,6 +4,7 @@ import { TimerConfigContext } from "../../../Contexts/TimerConfigContext";
 import { TimerStateContext } from "../../../Contexts/TimerStateContext";
 import Popup from "reactjs-popup";
 import { DailyTargetContext } from "./../../../Contexts/DailyTargetContext";
+import useLocalStorageState from "./../../../Hooks/useLocalStorageState";
 
 import Setting, {
   ButtonOption,
@@ -12,7 +13,7 @@ import Setting, {
   CustomizableButtonOptionList,
 } from "../../../Components/Setting/Setting";
 
-export default function Config() {
+export function PomodoroConfig() {
   const {
     studyDurationMs,
     shortBreakDurationMs,
@@ -29,7 +30,7 @@ export default function Config() {
   return (
     <Popup
       trigger={
-        <i className="fa-solid fa-screwdriver-wrench relative control-icon text-base h-2 w-2 centered-container"></i>
+        <i className="fa-solid fa-screwdriver-wrench relative inline mx-1 h-1 w-1 "></i>
       }
       modal
       nested
@@ -136,112 +137,39 @@ export default function Config() {
   );
 }
 
-export function PomodoroConfig() {
-  const {
-    studyDurationMs,
-    shortBreakDurationMs,
-    longBreakDurationMs,
-    setLongBreakDurationMs,
-    setShortBreakDurationMs,
-    setStudyDurationMs,
-  } = useContext(TimerConfigContext);
-
+export default function Config() {
   const { isRunning } = useContext(TimerStateContext);
+  // const [studyMode, setStudyMode] = useLocalStorageState(
+  //   "studyMode",
+  //   "pomodoro"
+  // );
 
+  // What i want -- to list 3 different modes, have config button display the mode's config settings, and have the timer use the mode's schedule
+
+  // Scheduler = duration, next, currentMode
+
+  // Modes = [{label, scheduler = {duration, next(), currentMode}, config}]
   return (
     <div id={styles.config} className={isRunning ? "hidden" : "visible"}>
-      <span className={styles.SelectRow}>
-        Study:
-        <SelectRow
-          selections={[
-            duration("25", 1500000),
-            duration("60", 3600000),
-            duration("90", 5400000),
-            duration("120", 7200000),
-          ]}
-          onSelect={setStudyDurationMs}
-          selected={studyDurationMs}
-        ></SelectRow>
-      </span>
-      <span className={styles.SelectRow}>
-        Short Break:
-        <SelectRow
-          selections={[
-            duration("5", 300000),
-            duration("10", 600000),
-            duration("20", 1200000),
-            duration("30", 1800000),
-          ]}
-          onSelect={setShortBreakDurationMs}
-          selected={shortBreakDurationMs}
-        ></SelectRow>
-      </span>
-      <span className={styles.longBreakRow}>
-        Long Break:
-        <span>
-          <SelectRow
-            selections={[
-              duration("15", 900000),
-              duration("20", 1200000),
-              duration("30", 1800000),
-              duration("45", 2700000),
-            ]}
-            onSelect={setLongBreakDurationMs}
-            selected={longBreakDurationMs}
-          ></SelectRow>
+      <span id="config-mode">
+        <span className={styles.configOption + " " + styles.configOptionActive}>
+          pomodoro
         </span>
+        <span className={styles.configOption}>stopwatch</span>
+        <span className={styles.configOption}>deepwork</span>
+        <PomodoroConfig></PomodoroConfig>
+      </span>
+
+      <span id="config-timer">
+        <span className={styles.configOption + " " + styles.configOptionActive}>
+          overtime
+        </span>
+        <span className={styles.configOption + " "}>mute</span>
       </span>
     </div>
   );
 }
 
-function SelectRow({
-  selections = [],
-  customEnabled = true,
-  onSelect,
-  selected,
-}) {
-  let customSelect = true;
-  return (
-    <span className={styles.SelectRow}>
-      {selections.map((duration) => {
-        if (duration.time === selected) customSelect = false;
-        return (
-          <span
-            className={
-              styles.duration +
-              " " +
-              (duration.time === selected && styles.active)
-            }
-            onClick={() => {
-              onSelect(duration.time);
-            }}
-          >
-            {duration.label}
-          </span>
-        );
-      })}
-      {(() => {
-        if (customEnabled) {
-          return (
-            <span
-              className={
-                styles.duration +
-                " " +
-                (customSelect && styles.active) +
-                " fa-solid fa-screwdriver-wrench clickable-icon ml-1 relative centered-container inline-flex"
-              }
-              onClick={() => {
-                onSelect(5 * 1000);
-              }}
-            ></span>
-          );
-        }
-      })()}
-    </span>
-  );
-}
-
-function duration(label, ms) {
-  return { label: label, time: ms };
+function option(label, value) {
+  return { label: label, value: value };
 }
