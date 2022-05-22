@@ -4,19 +4,20 @@ import styles from "./CircularTimer.module.css";
 import ControlBar from "./ControlBar";
 import { useContext } from "react";
 import { TimerStateContext } from "./../../Contexts/TimerStateContext";
-import usePomodoroScheduler from "./../../Hooks/usePomodoroScheduler";
 import { SessionsContext } from "./../../Contexts/SessionsContext";
 import { formatTime } from "./../../Helpers/formatTime";
+import { TimerModeContext } from "./../../Contexts/TimerModeContext";
 
+// SRP -- creates callbacks and calls timer component of current mode (pomodoro, stopwatch, etc)
 export default function Timer() {
   // Contexts
   const { setIsRunning, setIsStarted } = useContext(TimerStateContext);
   const { sessions, setSessions } = useContext(SessionsContext);
 
   // Study Schedule Handler
-  const scheduler = usePomodoroScheduler();
+  const { mode } = useContext(TimerModeContext);
 
-  // Timer callbacks
+  // 🤔 Timer callbacks, useCallback?
   let callbacks = {
     onStart: () => {
       setIsRunning(true);
@@ -31,13 +32,13 @@ export default function Timer() {
       prevSessions.push({
         startTime: startTime,
         endTime: Date.now(),
-        mode: scheduler.currentMode,
+        mode: mode.scheduler.currentMode,
       });
       setSessions(prevSessions);
 
       setIsRunning(false);
       setIsStarted(false);
-      scheduler.next();
+      mode.scheduler.next();
     },
     onReset: () => {
       console.log("Reset!");
@@ -52,22 +53,36 @@ export default function Timer() {
       console.log("Next, progress will not be counted");
       setIsRunning(false);
       setIsStarted(false);
-      scheduler.next();
+      mode.scheduler.next();
     },
   };
 
+  const timer = useTimer(mode, callbacks);
+
+  // if mode label is pomodoro, call PomodoroTimer. Else if mode label is stopwtch, call StopwatchTimer
   return (
     <div className={styles.timerContainer}>
-      <CircularTimer
-        thickness={0.03}
-        duration={scheduler.duration}
-        callbacks={callbacks}
-      />
+      {(() => {
+        if (mode.label === "pomodoro") {
+          return (
+            <PomodoroTimer
+              thickness={0.03}
+              duration={mode.scheduler.duration}
+              callbacks={callbacks}
+              label={mode.scheduler.currentMode}
+            />
+          );
+        } else if (mode.label === "stopwatch") {
+          return <StopwatchTimer />;
+        }
+      })()}
     </div>
   );
 }
 
-function CircularTimer({ thickness = 0.1, duration, callbacks }) {
+function StopwatchTimer() {}
+
+function PomodoroTimer({ thickness = 0.1, duration, callbacks, label }) {
   // Initialize useTimer hook
 
   const timer = useTimer(duration, callbacks);
@@ -85,6 +100,17 @@ function CircularTimer({ thickness = 0.1, duration, callbacks }) {
         animationDuration={timer.isRunning ? "1s" : "0.15s"}
       />
       <div id={styles.innerUI}>
+        <div className="centered-container" style={{ gridArea: "label" }}>
+          <span
+            className={
+              styles.label +
+              " " +
+              (timer.isRunning ? styles.hidden : styles.visible)
+            }
+          >
+            {label}
+          </span>
+        </div>
         <TextTimer
           seconds={remainingTime / 1000}
           style={{ color: "var(--title-color)" }}

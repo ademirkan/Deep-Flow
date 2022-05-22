@@ -1,16 +1,14 @@
 import { SESSION_MODE } from "../../Helpers/enum";
 import { useContext, useEffect } from "react";
-import { TimerConfigContext } from "./../../Contexts/TimerConfigContext";
 import { SessionsContext } from "./../../Contexts/SessionsContext";
 import { isDateToday } from "./../../Helpers/checkDate";
 import Popup from "reactjs-popup";
-import { DailyTargetContext } from "./../../Contexts/DailyTargetContext";
+import { ScheduleContext } from "../../Contexts/ScheduleContext";
 
 export default function Progress() {
   // const [sessions, setSessions] = useLocalStorageState("sessions", []);
   const { sessions, setSessions } = useContext(SessionsContext);
-  const { longBreakReq } = useContext(TimerConfigContext);
-  const { dailyTarget } = useContext(DailyTargetContext);
+  const { dailyTarget, fullSessionLength } = useContext(ScheduleContext);
 
   // clear session history at the start of a new day
   useEffect(() => {
@@ -31,25 +29,28 @@ export default function Progress() {
             session.mode === SESSION_MODE.STUDY ? sum + 1 : sum,
           0
         )}
-        longReq={longBreakReq}
+        fullSessionLength={fullSessionLength}
       />
     </div>
   );
 }
 
-function ProgressBar({ target, completed, longReq }) {
+function ProgressBar({ target, completed, fullSessionLength }) {
   return (
     <div className="progress-bar flex flex-row w-full justify-center flex-wrap">
-      {[...Array(Math.ceil(target / longReq))].map((_, i) => {
+      {[...Array(Math.ceil(target / fullSessionLength))].map((_, i) => {
         let row = (
           <SessionRow
             key={i}
-            numCircles={target > longReq ? longReq : target}
-            numComplete={completed > longReq ? longReq : completed}
+            numCircles={target > fullSessionLength ? fullSessionLength : target}
+            numComplete={
+              completed > fullSessionLength ? fullSessionLength : completed
+            }
           />
         );
-        target = target > longReq ? target - longReq : 0;
-        completed = completed > longReq ? completed - longReq : 0;
+        target = target > fullSessionLength ? target - fullSessionLength : 0;
+        completed =
+          completed > fullSessionLength ? completed - fullSessionLength : 0;
         return row;
       })}
     </div>

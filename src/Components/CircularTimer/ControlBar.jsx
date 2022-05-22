@@ -10,7 +10,7 @@ export default function ControlBar({
   let controls = !isRunning ? (
     <ControlButton
       icon={
-        <i className="fa-solid centered-container fa-circle-play control-icon text-3xl" />
+        <i className="fa-solid centered-container fa-circle-play control-icon text-3xl " />
       }
       onClick={handleStart}
     />

@@ -52,7 +52,6 @@ export function CustomizableButtonOptionList({
   );
 
   function handleClick(i) {
-    console.log(i);
     setActiveIndex(i);
 
     // if it is not inputOption, set the value on click

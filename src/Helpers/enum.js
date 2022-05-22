@@ -1,5 +1,5 @@
 export const SESSION_MODE = {
-  STUDY: "STUDY",
-  SHORT_BREAK: "SHORT",
-  LONG_BREAK: "LONG",
+  STUDY: "study",
+  SHORT_BREAK: "short break",
+  LONG_BREAK: "long break",
 };
