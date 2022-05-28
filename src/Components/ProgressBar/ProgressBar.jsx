@@ -3,12 +3,12 @@ import { useContext, useEffect } from "react";
 import { SessionsContext } from "./../../Contexts/SessionsContext";
 import { isDateToday } from "./../../Helpers/checkDate";
 import Popup from "reactjs-popup";
-import { ScheduleContext } from "../../Contexts/ScheduleContext";
+import { ProgressbarContext } from "./../../Contexts/ProgressbarContext";
 
 export default function Progress() {
   // const [sessions, setSessions] = useLocalStorageState("sessions", []);
   const { sessions, setSessions } = useContext(SessionsContext);
-  const { dailyTarget, fullSessionLength } = useContext(ScheduleContext);
+  const { dailyTarget, fullSessionLength } = useContext(ProgressbarContext);
 
   // clear session history at the start of a new day
   useEffect(() => {

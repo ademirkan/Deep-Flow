@@ -1,5 +1,6 @@
 import Progress from "../../Components/ProgressBar/ProgressBar";
-import Timer from "./../../Components/CircularTimer/Timer";
+import { useContext } from "react";
+import { SchedulerContext } from "./../../Contexts/SchedulerContext";
 
 function TimerPage() {
   return (
@@ -11,6 +12,18 @@ function TimerPage() {
       <Progress />
     </div>
   );
+}
+
+function Timer() {
+  const currentTimer = useContext(SchedulerContext).currentTimer;
+
+  const timerByTypes = {
+    countdown: (timer) => (
+      <CountdownTimer label={timer.label} initialDuration={timer.duration} />
+    ),
+    stopwatch: (timer) => <StopwatchTimer label={timer.label} />,
+  };
+  return timerByTypes[`${currentTimer.type}`](currentTimer);
 }
 
 export default TimerPage;

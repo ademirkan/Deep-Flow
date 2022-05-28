@@ -4,16 +4,16 @@ import TimerPage from "./Pages/TimerPage/TimerPage";
 import NavBar from "./Layout/NavBar/NavBar";
 import TimerStateProvider from "./Contexts/TimerStateContext";
 import SessionsProvider from "./Contexts/SessionsContext";
-import SchedulePovider from "./Contexts/ScheduleContext";
-import TimerModeProvider from "./Contexts/TimerModeContext";
+import ProgressbarProvider from "./Contexts/ProgressbarContext";
+import SchedulerProvider from "./Contexts/SchedulerContext";
 
 //🤔 multiContexts?
 
 function App() {
   return (
-    <SchedulePovider>
+    <ProgressbarProvider>
       <TimerStateProvider>
-        <TimerModeProvider>
+        <SchedulerProvider>
           <SessionsProvider>
             <div id="display">
               <NavBar />
@@ -21,9 +21,9 @@ function App() {
               <Footer />
             </div>
           </SessionsProvider>
-        </TimerModeProvider>
+        </SchedulerProvider>
       </TimerStateProvider>
-    </SchedulePovider>
+    </ProgressbarProvider>
   );
 }
 

@@ -57,8 +57,6 @@ export default function Timer() {
     },
   };
 
-  const timer = useTimer(mode, callbacks);
-
   // if mode label is pomodoro, call PomodoroTimer. Else if mode label is stopwtch, call StopwatchTimer
   return (
     <div className={styles.timerContainer}>
@@ -79,8 +77,6 @@ export default function Timer() {
     </div>
   );
 }
-
-function StopwatchTimer() {}
 
 function PomodoroTimer({ thickness = 0.1, duration, callbacks, label }) {
   // Initialize useTimer hook

@@ -3,7 +3,7 @@ import { SESSION_MODE } from "./../Helpers/enum";
 import { useLayoutEffect, useEffect } from "react";
 import { useState, useContext } from "react";
 import useSessionStorageState from "./useSessionStorageState";
-import { ScheduleContext } from "../Contexts/ScheduleContext";
+import { ScheduleContext } from "../Contexts/ProgressbarContext";
 
 import Setting, {
   CustomizableButtonOptionList,
