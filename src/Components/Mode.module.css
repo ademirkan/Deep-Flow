@@ -1,0 +1,20 @@
+.modal {
+}
+
+/*title of config modal*/
+.header {
+  font-size: xx-large;
+  color: var(--secondary-color);
+}
+
+.mode {
+  color: var(--secondary-color);
+}
+
+.mode:hover {
+  color: var(--title-color);
+}
+
+.active {
+  color: var(--primary-color);
+}

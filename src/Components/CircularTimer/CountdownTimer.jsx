@@ -3,13 +3,13 @@ import useTimer from "../../Hooks/useTimer";
 import styles from "./CircularTimer.module.css";
 import ControlBar from "./ControlBar";
 import { useContext } from "react";
-import { TimerStateContext } from "./../../Contexts/TimerStateContext";
-import { SessionsContext } from "./../../Contexts/SessionsContext";
-import { formatTime } from "./../../Helpers/formatTime";
+import { TimerStateContext } from "../../Contexts/TimerStateContext";
+import { SessionsContext } from "../../Contexts/SessionsContext";
+import { formatTime } from "../../Helpers/formatTime";
 import { TimerModeContext } from "./../../Contexts/TimerModeContext";
 
 // SRP -- creates callbacks and calls timer component of current mode (pomodoro, stopwatch, etc)
-export default function Timer() {
+export default function CountdownTimer() {
   // Contexts
   const { setIsRunning, setIsStarted } = useContext(TimerStateContext);
   const { sessions, setSessions } = useContext(SessionsContext);
@@ -60,25 +60,22 @@ export default function Timer() {
   // if mode label is pomodoro, call PomodoroTimer. Else if mode label is stopwtch, call StopwatchTimer
   return (
     <div className={styles.timerContainer}>
-      {(() => {
-        if (mode.label === "pomodoro") {
-          return (
-            <PomodoroTimer
-              thickness={0.03}
-              duration={mode.scheduler.duration}
-              callbacks={callbacks}
-              label={mode.scheduler.currentMode}
-            />
-          );
-        } else if (mode.label === "stopwatch") {
-          return <StopwatchTimer />;
-        }
-      })()}
+      <CircularCountdownTimer
+        thickness={0.03}
+        duration={mode.scheduler.duration}
+        callbacks={callbacks}
+        label={mode.scheduler.currentMode}
+      />
     </div>
   );
 }
 
-function PomodoroTimer({ thickness = 0.1, duration, callbacks, label }) {
+function CircularCountdownTimer({
+  thickness = 0.1,
+  duration,
+  callbacks,
+  label,
+}) {
   // Initialize useTimer hook
 
   const timer = useTimer(duration, callbacks);

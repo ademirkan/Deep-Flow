@@ -1,4 +1,4 @@
-import { SESSION_MODE } from "../../Helpers/enum";
+import { SESSION_LABEL } from "../../Helpers/enum";
 import { useContext, useEffect } from "react";
 import { SessionsContext } from "./../../Contexts/SessionsContext";
 import { isDateToday } from "./../../Helpers/checkDate";
@@ -8,7 +8,7 @@ import { ProgressbarContext } from "./../../Contexts/ProgressbarContext";
 export default function Progress() {
   // const [sessions, setSessions] = useLocalStorageState("sessions", []);
   const { sessions, setSessions } = useContext(SessionsContext);
-  const { dailyTarget, fullSessionLength } = useContext(ProgressbarContext);
+  const { dailyTarget, sessionLength } = useContext(ProgressbarContext);
 
   // clear session history at the start of a new day
   useEffect(() => {
@@ -26,31 +26,28 @@ export default function Progress() {
         target={dailyTarget}
         completed={sessions.reduce(
           (sum, session) =>
-            session.mode === SESSION_MODE.STUDY ? sum + 1 : sum,
+            session.mode === SESSION_LABEL.STUDY ? sum + 1 : sum,
           0
         )}
-        fullSessionLength={fullSessionLength}
+        sessionLength={sessionLength}
       />
     </div>
   );
 }
 
-function ProgressBar({ target, completed, fullSessionLength }) {
+function ProgressBar({ target, completed, sessionLength }) {
   return (
     <div className="progress-bar flex flex-row w-full justify-center flex-wrap">
-      {[...Array(Math.ceil(target / fullSessionLength))].map((_, i) => {
+      {[...Array(Math.ceil(target / sessionLength))].map((_, i) => {
         let row = (
           <SessionRow
             key={i}
-            numCircles={target > fullSessionLength ? fullSessionLength : target}
-            numComplete={
-              completed > fullSessionLength ? fullSessionLength : completed
-            }
+            numCircles={target > sessionLength ? sessionLength : target}
+            numComplete={completed > sessionLength ? sessionLength : completed}
           />
         );
-        target = target > fullSessionLength ? target - fullSessionLength : 0;
-        completed =
-          completed > fullSessionLength ? completed - fullSessionLength : 0;
+        target = target > sessionLength ? target - sessionLength : 0;
+        completed = completed > sessionLength ? completed - sessionLength : 0;
         return row;
       })}
     </div>

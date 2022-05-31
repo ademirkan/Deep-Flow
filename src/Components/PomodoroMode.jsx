@@ -1,16 +1,29 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { ProgressbarContext } from "./../Contexts/ProgressbarContext";
 import useLocalStorageState from "./../Hooks/useLocalStorageState";
-import { SESSION_MODE } from "./../Helpers/enum";
+import {
+  SESSION_LABEL,
+  STUDY_MODE,
+  TIMER_TYPE,
+  DURATION,
+} from "./../Helpers/enum";
 import useSessionStorageState from "./../Hooks/useSessionStorageState";
 import { SchedulerContext } from "./../Contexts/SchedulerContext";
+import Setting, {
+  CustomizableButtonOptionList,
+  InputOption,
+} from "./Setting/Setting";
 
-const PomodoroMode = ({ isActive }) => {
-  const label = "pomodoro";
+import styles from "./Mode.module.css";
 
-  // Config states
+export const PomodoroMode = ({ isActive, onSelect, setConfig }) => {
+  const name = STUDY_MODE.POMODORO;
+
+  // Contexts
   const progressContext = useContext(ProgressbarContext);
   const { setScheduler } = useContext(SchedulerContext);
+
+  // Timer Configuration
   const [studyDurationMs, setStudyDurationMs] = useLocalStorageState(
     "POMODORO_STUDY",
     25 * 60 * 1000
@@ -32,19 +45,20 @@ const PomodoroMode = ({ isActive }) => {
     8
   );
 
-  // scheduler does not care how schedule is implemented, as long as setSchedule("pomodoro", currentTimer={type, label, duration}, next, config) are called
-  const [mode, setMode] = useState(SESSION_MODE.STUDY);
+  // Current session trackers
+  const [mode, setMode] = useState(SESSION_LABEL.STUDY);
   const [numStudyComplete, setNumStudyComplete] = useSessionStorageState(
     "currentNumCompleted",
     0
   );
 
-  function createScheduler() {
+  // Scheduler object = {label, currentTimer, next, config}
+  const scheduler = (() => {
     function getDuration(mode) {
       switch (mode) {
-        case SESSION_MODE.STUDY:
+        case SESSION_LABEL.STUDY:
           return studyDurationMs;
-        case SESSION_MODE.SHORT_BREAK:
+        case SESSION_LABEL.SHORT_BREAK:
           return shortBreakDurationMs;
         default:
           return longBreakDurationMs;
@@ -52,129 +66,185 @@ const PomodoroMode = ({ isActive }) => {
     }
 
     const currentTimer = {
-      type: "countdown",
+      type: TIMER_TYPE.COUNTDOWN,
       label: mode,
       duration: getDuration(mode),
     };
 
     // next -- updates mode and numStudyComplete
-    const next = () => {};
+    function next() {
+      let newNumComplete;
+      let nextSessionMode;
+
+      if (mode === SESSION_LABEL.STUDY) {
+        newNumComplete = numStudyComplete + 1;
+        setNumStudyComplete(newNumComplete);
+        nextSessionMode =
+          newNumComplete % longBreakReq === 0
+            ? SESSION_LABEL.LONG_BREAK
+            : SESSION_LABEL.SHORT_BREAK;
+
+        setMode(nextSessionMode);
+        return;
+      }
+
+      setMode(SESSION_LABEL.STUDY);
+    }
 
     // config
-    const config = () => {};
+    const config = (close) => (
+      <div className={styles.modal}>
+        <h1 className={styles.header}> Pomodoro config </h1>
 
-    return { label, currentTimer, next, config };
-  }
+        <input type="number" autoFocus style={{ display: "none" }}></input>
+        <Setting
+          title="Study duration"
+          description="Length of the study duration"
+          actionArea={
+            <CustomizableButtonOptionList
+              options={[
+                { label: "25", value: DURATION[25] },
+                { label: "50", value: DURATION[50] },
+                { label: "90", value: DURATION[90] },
+              ]}
+              currentValue={studyDurationMs}
+              setValue={setStudyDurationMs}
+              toValue={(label) => parseInt(label) * 1000 * 60}
+            ></CustomizableButtonOptionList>
+          }
+        ></Setting>
 
-  // first mount -- check if this component is active. If it is, update progressbarcontext, setScheduler()
+        <Setting
+          title="Short break"
+          description="Length of the short break duration"
+          actionArea={
+            <CustomizableButtonOptionList
+              options={[
+                { label: "5", value: DURATION[5] },
+                { label: "10", value: DURATION[10] },
+                { label: "15", value: DURATION[15] },
+              ]}
+              currentValue={shortBreakDurationMs}
+              setValue={setShortBreakDurationMs}
+              toValue={(label) => parseInt(label) * 1000 * 60}
+            ></CustomizableButtonOptionList>
+          }
+        ></Setting>
+        <Setting
+          title="Long break"
+          description="Length of the long break duration"
+          actionArea={
+            <CustomizableButtonOptionList
+              options={[
+                { label: "15", value: DURATION[15] },
+                { label: "30", value: DURATION[30] },
+                { label: "45", value: DURATION[45] },
+              ]}
+              currentValue={longBreakDurationMs}
+              setValue={setLongBreakDurationMs}
+              toValue={(label) => parseInt(label) * 1000 * 60}
+            ></CustomizableButtonOptionList>
+          }
+        ></Setting>
+
+        <Setting
+          title="Pomodoro cycle"
+          description="Number of pomodoros required for a long break"
+          actionArea={
+            <InputOption
+              currentValue={longBreakReq}
+              setValue={(value) => {
+                setLongBreakReq(parseInt(value));
+                progressContext.setSessionLength(parseInt(value));
+              }}
+              placeholder={longBreakReq}
+            ></InputOption>
+          }
+        ></Setting>
+
+        <Setting
+          title="Daily target"
+          description="The number of pomodoros displayed on the progress bar"
+          actionArea={
+            <InputOption
+              currentValue={pomodoroDailyTarget}
+              setValue={(value) => {
+                setPomodoroDailyTarget(parseInt(value));
+                progressContext.setDailyTarget(parseInt(value));
+              }}
+              placeholder={pomodoroDailyTarget}
+            ></InputOption>
+          }
+        ></Setting>
+        <div className="flex justify-center">
+          <button
+            className="button"
+            style={{
+              borderRadius: "0.5rem",
+              width: "100%",
+              height: "40px",
+            }}
+            onClick={close}
+          >
+            ok
+          </button>
+        </div>
+      </div>
+    );
+    return { name, currentTimer, next, config };
+  })();
+
+  const handleClick = () => {
+    onSelect(name, scheduler.config);
+    progressContext.setDailyTarget(pomodoroDailyTarget);
+    progressContext.setSessionLength(longBreakReq);
+  };
+
+  // First mount
   useEffect(() => {
     if (isActive) {
       progressContext.setDailyTarget(pomodoroDailyTarget);
       progressContext.setSessionLength(longBreakReq);
 
       // setSchedule
-      const scheduler = createScheduler;
-      setScheduler(
-        scheduler.label,
-        scheduler.currentTimer,
-        scheduler.next,
-        scheduler.config
-      );
+      setScheduler(scheduler.label, scheduler.currentTimer, scheduler.next);
+
+      setConfig(() => scheduler.config);
     }
   }, []);
 
-  // on rerenders...
-  // if isActive changes, setScheduler() from scratch
+  // Rerenders -- listen to isActive, config states, and session trackers
   useEffect(() => {
     if (isActive) {
-      progressContext.setDailyTarget(pomodoroDailyTarget);
-      progressContext.setSessionLength(longBreakReq);
-
       // setSchedule
-      const scheduler = createScheduler;
-      setScheduler(
-        scheduler.label,
-        scheduler.currentTimer,
-        scheduler.next,
-        scheduler.config
-      );
+      setScheduler(scheduler.label, scheduler.currentTimer, scheduler.next);
+      setConfig(() => scheduler.config);
     }
-  }, [isActive]);
-
-  // if config changes, setScheduler from scratch
-  useEffect(() => {
-    if (isActive) {
-      progressContext.setDailyTarget(pomodoroDailyTarget);
-      progressContext.setSessionLength(longBreakReq);
-
-      // setSchedule
-      const scheduler = createScheduler;
-      setScheduler(
-        scheduler.label,
-        scheduler.currentTimer,
-        scheduler.next,
-        scheduler.config
-      );
-    }
-  }, [isActive]);
-
-  // if pomodoro progress config states change, update progressbar context
-  useEffect(() => {
-    progressContext.setDailyTarget(pomodoroDailyTarget);
-    progressContext.setSessionLength(longBreakReq);
-  }, [pomodoroDailyTarget, longBreakReq]);
-  // if next is called, update tracker states, setScheduler from scratch
-
-  // what does next look like?
-  // next = ()=> calculate what the next timer will look like based on current one finishing, setTimer to that
-
-  // whenever any POMODORO config settings change
-  // recompute setTimer(), next(), config
-  // setScheduler
-
-  useEffect(() => {
-    // compute timer
-    function getDuration(mode) {
-      switch (mode) {
-        case SESSION_MODE.STUDY:
-          return studyDurationMs;
-        case SESSION_MODE.SHORT_BREAK:
-          return shortBreakDurationMs;
-        default:
-          return longBreakDurationMs;
-      }
-    }
-
-    const currentTimer = {
-      type: "countdown",
-      label: mode,
-      duration: getDuration(mode),
-    };
-
-    const config = (close) => {};
-
-    // compute next()
-    const next = () => {};
-
-    // recompute config
-    // setScheduler()
   }, [
+    progressContext,
     studyDurationMs,
-    setStudyDurationMs,
     shortBreakDurationMs,
-    setShortBreakDurationMs,
     longBreakDurationMs,
-    setLongBreakDurationMs,
     longBreakReq,
-    setLongBreakReq,
     pomodoroDailyTarget,
-    setPomodoroDailyTarget,
+    mode,
+    numStudyComplete,
+    isActive,
+    longBreakReq,
   ]);
 
-  // whenever next is called, ie timer changes
-  // recompute next()
-  // setScheduler
-  useEffect(() => {}, [mode, setMode, numStudyComplete, setNumStudyComplete]);
-
-  return <span>Pomodoro</span>;
+  useEffect(() => {
+    if (isActive) {
+      progressContext.setDailyTarget(pomodoroDailyTarget);
+      progressContext.setSessionLength(longBreakReq);
+    }
+  }, [pomodoroDailyTarget, longBreakReq]);
+  return (
+    <span
+      className={styles.mode + " " + (isActive ? styles.active : "")}
+      onClick={handleClick}
+    >
+      {name}
+    </span>
+  );
 };

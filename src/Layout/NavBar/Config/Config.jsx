@@ -3,23 +3,60 @@ import { useState, useContext } from "react";
 import { TimerStateContext } from "../../../Contexts/TimerStateContext";
 import Popup from "reactjs-popup";
 import useLocalStorageState from "./../../../Hooks/useLocalStorageState";
-import { SchedulerContext } from "./../../../Contexts/SchedulerContext";
+import { PomodoroMode } from "./../../../Components/PomodoroMode";
+import { StopwatchMode } from "../../../Components/StopwatchMode";
 
 export default function Config() {
   const { isRunning } = useContext(TimerStateContext);
   const [mode, setMode] = useLocalStorageState("studyMode", "pomodoro");
+  const [config, setConfig1] = useState(<div></div>);
 
-  const modesByType = {
-    pomodoro: (isActive) => <PomodoroMode isActive={isActive} />,
-    stopwatch: (isActive) => <StopwatchMode isActive={isActive} />,
-    custom: (isActive) => <CustomMode isActive={isActive} />,
+  function handleSelect(m, config = {}) {
+    console.log("handleselect " + m);
+    if (m !== mode) {
+      setMode(m);
+    }
+    if (config) setConfig1(() => config);
+  }
+
+  function setConfig(config) {
+    console.log("SETTING CONFIG");
+    console.log(config);
+    setConfig1(config);
+  }
+  const modes = {
+    stopwatch: (isActive) => (
+      <StopwatchMode
+        isActive={isActive}
+        onSelect={handleSelect}
+        setConfig={setConfig}
+      />
+    ),
+    pomodoro: (isActive) => (
+      <PomodoroMode
+        isActive={isActive}
+        onSelect={handleSelect}
+        setConfig={setConfig}
+      />
+    ),
+
+    // custom: (isActive) => <CustomMode isActive={isActive} />,
   };
 
   return (
     <div id={styles.config} className={isRunning ? "hidden" : "visible"}>
       <span id="config-mode">
-        {Object.entries(modesByType).map((m) => m[1](m[0] === mode))}
+        {Object.entries(modes).map((m) => m[1](m[0] === mode))}
       </span>
+      <Popup
+        trigger={
+          <i className="fa-solid fa-screwdriver-wrench relative inline mx-1 h-1 w-1 "></i>
+        }
+        modal
+        nested
+      >
+        {config}
+      </Popup>
     </div>
   );
 

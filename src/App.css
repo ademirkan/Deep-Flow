@@ -72,10 +72,20 @@ body {
   cursor: pointer;
   background-color: var(--alt-secondary-color);
   outline: none;
-
+  transition: 150ms ease-in-out;
   font-size: small;
   padding: 0.3rem;
   border-radius: 0.5rem;
+}
+
+.button:hover {
+  background-color: var(--title-color);
+  color: var(--alt-secondary-color);
+}
+
+.button:active {
+  background-color: var(--alt-secondary-color);
+  color: var(--secondary-color);
 }
 
 .icon {
