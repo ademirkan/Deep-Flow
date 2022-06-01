@@ -25,15 +25,15 @@ export default function Config() {
     setConfig1(config);
   }
   const modes = {
-    stopwatch: (isActive) => (
-      <StopwatchMode
+    pomodoro: (isActive) => (
+      <PomodoroMode
         isActive={isActive}
         onSelect={handleSelect}
         setConfig={setConfig}
       />
     ),
-    pomodoro: (isActive) => (
-      <PomodoroMode
+    stopwatch: (isActive) => (
+      <StopwatchMode
         isActive={isActive}
         onSelect={handleSelect}
         setConfig={setConfig}

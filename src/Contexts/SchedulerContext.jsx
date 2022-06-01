@@ -14,10 +14,9 @@ export const SchedulerContext = react.createContext({
 
 export default function SchedulerProvider({ children }) {
   const [mode, setMode] = useState("");
-  const [currentTimer, setCurrentTimer] = useState({});
+  const [currentTimer, setCurrentTimer] = useState();
   const [next, setNext] = useState(() => {});
 
-  console.log(currentTimer);
   const scheduler = { mode, currentTimer, next };
   const setScheduler = (mode, currentTimer, next) => {
     setMode(mode);

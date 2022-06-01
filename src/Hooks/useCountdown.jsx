@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from "react";
 
 // imparative vs declarative
 
-function useTimer(duration, options = {}) {
+function useCountdown(duration, options = {}) {
   // States
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
@@ -114,4 +114,4 @@ function useTimer(duration, options = {}) {
   return { time, isRunning, start, stop, reset, next };
 }
 
-export default useTimer;
+export default useCountdown;

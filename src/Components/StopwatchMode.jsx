@@ -61,7 +61,7 @@ export const StopwatchMode = ({ isActive, onSelect, setConfig }) => {
         <input type="number" autoFocus style={{ display: "none" }}></input>
         <Setting
           title="Minimum duration"
-          description="Minimum work period for session to be considered complete"
+          description="Minimum amount of time before you are allowed to take a break"
           actionArea={
             <CustomizableButtonOptionList
               options={[
@@ -158,6 +158,7 @@ export const StopwatchMode = ({ isActive, onSelect, setConfig }) => {
     longBreakReq,
     isActive,
     stopwatchDailyTarget,
+    minDuration,
     longBreakReq,
   ]);
 

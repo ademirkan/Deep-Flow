@@ -1,21 +1,21 @@
 import CircularProgress from "./CircularProgress/CircularProgress";
-import useTimer from "../../Hooks/useTimer";
+import useCountdown from "../../Hooks/useCountdown";
 import styles from "./CircularTimer.module.css";
 import ControlBar from "./ControlBar";
 import { useContext } from "react";
 import { TimerStateContext } from "../../Contexts/TimerStateContext";
 import { SessionsContext } from "../../Contexts/SessionsContext";
 import { formatTime } from "../../Helpers/formatTime";
-import { TimerModeContext } from "./../../Contexts/TimerModeContext";
 
-// SRP -- creates callbacks and calls timer component of current mode (pomodoro, stopwatch, etc)
-export default function CountdownTimer() {
+// SRP -- creates callbacks and delegates to
+export default function CountdownTimer({
+  duration,
+  label = "",
+  onFinish = () => {},
+}) {
   // Contexts
   const { setIsRunning, setIsStarted } = useContext(TimerStateContext);
   const { sessions, setSessions } = useContext(SessionsContext);
-
-  // Study Schedule Handler
-  const { mode } = useContext(TimerModeContext);
 
   // 🤔 Timer callbacks, useCallback?
   let callbacks = {
@@ -32,13 +32,13 @@ export default function CountdownTimer() {
       prevSessions.push({
         startTime: startTime,
         endTime: Date.now(),
-        mode: mode.scheduler.currentMode,
+        mode: label,
       });
       setSessions(prevSessions);
 
       setIsRunning(false);
       setIsStarted(false);
-      mode.scheduler.next();
+      onFinish();
     },
     onReset: () => {
       console.log("Reset!");
@@ -53,32 +53,25 @@ export default function CountdownTimer() {
       console.log("Next, progress will not be counted");
       setIsRunning(false);
       setIsStarted(false);
-      mode.scheduler.next();
+      onFinish();
     },
   };
 
-  // if mode label is pomodoro, call PomodoroTimer. Else if mode label is stopwtch, call StopwatchTimer
   return (
     <div className={styles.timerContainer}>
       <CircularCountdownTimer
-        thickness={0.03}
-        duration={mode.scheduler.duration}
+        duration={duration}
+        label={label}
         callbacks={callbacks}
-        label={mode.scheduler.currentMode}
       />
     </div>
   );
 }
 
-function CircularCountdownTimer({
-  thickness = 0.1,
-  duration,
-  callbacks,
-  label,
-}) {
-  // Initialize useTimer hook
+function CircularCountdownTimer({ duration, callbacks, label }) {
+  // Initialize useCountdown hook
 
-  const timer = useTimer(duration, callbacks);
+  const timer = useCountdown(duration, callbacks);
 
   let remainingTime = duration - timer.time;
   return (
@@ -89,7 +82,7 @@ function CircularCountdownTimer({
             ? (remainingTime - 900) / duration
             : remainingTime / duration
         }
-        thickness={thickness}
+        thickness={0.03}
         animationDuration={timer.isRunning ? "1s" : "0.15s"}
       />
       <div id={styles.innerUI}>
@@ -107,7 +100,7 @@ function CircularCountdownTimer({
         <TextTimer
           seconds={remainingTime / 1000}
           style={{ color: "var(--title-color)" }}
-        ></TextTimer>
+        />
         <ControlBar
           isRunning={timer.isRunning}
           handleStart={timer.start}
