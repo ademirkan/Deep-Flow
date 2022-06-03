@@ -18,25 +18,41 @@ function TimerPage() {
 function Timer() {
   const { currentTimer, next } = useContext(SchedulerContext).scheduler;
 
+  // called when timer reaches the duration
+  const handleFinish = (start, end, time) => {
+    // ... depends on config / settings. Overtime?
+
+    // trigger modal
+
+    // push to sessionContext
+
+    next();
+  };
+
+  // called when timer is ended before it reaches the duration
+  const handleAbort = (start, end, time) => {
+    next();
+  };
+
   const timerByTypes = {
     countdown: (timer) => (
       <CountdownTimer
         duration={timer.duration}
         label={timer.label}
-        onFinish={next}
+        onFinish={handleFinish}
+        overtime={false}
       />
     ),
     stopwatch: (timer) => (
       <CountdownTimer
         duration={timer.duration}
         label={timer.label}
-        onFinish={next}
+        onFinish={handleFinish}
+        overtime={false}
       />
     ),
   };
 
-  console.log("rendering timer!");
-  console.log(currentTimer);
   return currentTimer ? (
     timerByTypes[`${currentTimer.type}`](currentTimer)
   ) : (

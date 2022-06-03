@@ -2,7 +2,7 @@ import CircularProgress from "./CircularProgress/CircularProgress";
 import useCountdown from "../../Hooks/useCountdown";
 import styles from "./CircularTimer.module.css";
 import ControlBar from "./ControlBar";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { TimerStateContext } from "../../Contexts/TimerStateContext";
 import { SessionsContext } from "../../Contexts/SessionsContext";
 import { formatTime } from "../../Helpers/formatTime";
@@ -11,17 +11,29 @@ import { formatTime } from "../../Helpers/formatTime";
 export default function CountdownTimer({
   duration,
   label = "",
-  onFinish = () => {},
+  onFinish = (start, stop, time) => {}, // call when timer reaches duration
+  onAbort = (start, stop, time) => {}, // call when timer is aborted before finishing
+  overtime = false,
 }) {
-  // Contexts
   const { setIsRunning, setIsStarted } = useContext(TimerStateContext);
   const { sessions, setSessions } = useContext(SessionsContext);
+  const [events, setEvents] = useState([
+    {
+      time: duration - 5 * 1000 * 60,
+      callback: () => {
+        console.log("5 Minutes left!");
+      },
+    },
+  ]);
 
   // 🤔 Timer callbacks, useCallback?
   let callbacks = {
-    onStart: () => {
+    onFirstStart: () => {
       setIsRunning(true);
       setIsStarted(true);
+    },
+    onStart: () => {
+      setIsRunning(true);
     },
     onTick: () => {
       console.log("Tick!");
@@ -38,7 +50,7 @@ export default function CountdownTimer({
 
       setIsRunning(false);
       setIsStarted(false);
-      onFinish();
+      callback();
     },
     onReset: () => {
       console.log("Reset!");
@@ -49,11 +61,11 @@ export default function CountdownTimer({
       console.log("Stopped!");
       setIsRunning(false);
     },
-    onNext: () => {
-      console.log("Next, progress will not be counted");
+    onAbort: () => {
+      console.log("Abort, go next, progress will not be counted");
       setIsRunning(false);
       setIsStarted(false);
-      onFinish();
+      callback(); //
     },
   };
 
@@ -63,54 +75,62 @@ export default function CountdownTimer({
         duration={duration}
         label={label}
         callbacks={callbacks}
+        events={events}
       />
     </div>
   );
 }
 
-function CircularCountdownTimer({ duration, callbacks, label }) {
+function CircularCountdownTimer({
+  duration,
+  currentTime,
+  label = "",
+  clockwise = true,
+}) {
+  // if currentTime > duration, overtime
   // Initialize useCountdown hook
-
-  const timer = useCountdown(duration, callbacks);
-
-  let remainingTime = duration - timer.time;
-  return (
-    <>
-      <CircularProgress
-        percentFilled={
-          timer.isRunning
-            ? (remainingTime - 900) / duration
-            : remainingTime / duration
-        }
-        thickness={0.03}
-        animationDuration={timer.isRunning ? "1s" : "0.15s"}
-      />
-      <div id={styles.innerUI}>
-        <div className="centered-container" style={{ gridArea: "label" }}>
-          <span
-            className={
-              styles.label +
-              " " +
-              (timer.isRunning ? styles.hidden : styles.visible)
-            }
-          >
-            {label}
-          </span>
-        </div>
-        <TextTimer
-          seconds={remainingTime / 1000}
-          style={{ color: "var(--title-color)" }}
-        />
-        <ControlBar
-          isRunning={timer.isRunning}
-          handleStart={timer.start}
-          handleStop={timer.stop}
-          handleNext={timer.next}
-          handleReset={timer.reset}
-        />
-      </div>
-    </>
-  );
+  // const timer = useCountdown(duration, callbacks, events);
+  // let remainingTime = duration - timer.time;
+  // const handleNext = () => {
+  //   callbacks.onAbort();
+  // };
+  // return (
+  //   <>
+  //     <CircularProgress
+  //       percentFilled={
+  //         timer.isRunning
+  //           ? (remainingTime - 900) / duration
+  //           : remainingTime / duration
+  //       }
+  //       thickness={0.03}
+  //       animationDuration={timer.isRunning ? "1s" : "0.15s"}
+  //     />
+  //     <div id={styles.innerUI}>
+  //       <div className="centered-container" style={{ gridArea: "label" }}>
+  //         <span
+  //           className={
+  //             styles.label +
+  //             " " +
+  //             (timer.isRunning ? styles.hidden : styles.visible)
+  //           }
+  //         >
+  //           {label}
+  //         </span>
+  //       </div>
+  //       <TextTimer
+  //         seconds={remainingTime / 1000}
+  //         style={{ color: "var(--title-color)" }}
+  //       />
+  //       <ControlBar
+  //         isRunning={timer.isRunning}
+  //         onStart={timer.start}
+  //         onStop={timer.stop}
+  //         onNext={handleNext}
+  //         onReset={timer.reset}
+  //       />
+  //     </div>
+  //   </>
+  // );
 }
 
 function TextTimer({ seconds, style = {} }) {

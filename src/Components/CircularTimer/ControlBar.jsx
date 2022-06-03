@@ -2,17 +2,17 @@ import styles from "./CircularTimer.module.css";
 
 export default function ControlBar({
   isRunning,
-  handleStart,
-  handleStop,
-  handleNext,
-  handleReset,
+  onStart,
+  onStop,
+  onNext,
+  onReset,
 }) {
   let controls = !isRunning ? (
     <ControlButton
       icon={
         <i className="fa-solid centered-container fa-circle-play control-icon text-3xl " />
       }
-      onClick={handleStart}
+      onClick={onStart}
     />
   ) : (
     <>
@@ -20,19 +20,19 @@ export default function ControlBar({
         icon={
           <i className="fa-solid centered-container fa-clock-rotate-left control-icon" />
         }
-        onClick={handleReset}
+        onClick={onReset}
       />
       <ControlButton
         icon={
           <i className="fa-solid centered-container fa-circle-pause control-icon text-3xl" />
         }
-        onClick={handleStop}
+        onClick={onStop}
       />
       <ControlButton
         icon={
           <i className="fa-solid centered-container fa-circle-chevron-right control-icon"></i>
         }
-        onClick={handleNext}
+        onClick={onNext}
       />
     </>
   );

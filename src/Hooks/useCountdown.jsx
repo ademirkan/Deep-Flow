@@ -1,26 +1,28 @@
-import { faBuildingShield } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useEffect, useState } from "react";
 
 // imparative vs declarative
 
-function useCountdown(duration, options = {}) {
+function useCountdown(duration, options = {}, events = []) {
   // States
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [isStarted, setIsStarted] = useState(false); // true if timer has started, false when reset
 
   //Refs
   const lastUpdateRef = useRef(null);
   const callbacksRef = useRef({
-    onStart: options.onStart,
-    onFinish: options.onFinish,
-    onTick: options.onTick,
-    onStop: options.onStop,
-    onReset: options.onReset,
-    onNext: options.onNext,
+    onFirstStart: options.onFirstStart, // called only for first start
+    onStart: options.onStart, // called for each start & resume except first start
+    onFinish: options.onFinish, // called when time reaches duration
+    onTick: options.onTick, // called for each tick interval
+    onStop: options.onStop, // called for each pause
+    onReset: options.onReset, // called when timer is reset
+    onNext: options.onNext, // NOT NEEDED
+    onAbort: options.onAbort, // called when timer is ended early
   });
   const startTimeRef = useRef(null);
-
-  // Options -- onStart, onTick, onStop, onFinish, onReset, tickInterval
+  const eventsRef = useRef([...events]);
+  const initialEventsRef = useRef(events);
   const { tickInterval = 1000 } = options;
 
   // Toggle the timer on and off when isRunning is changed
@@ -45,7 +47,25 @@ function useCountdown(duration, options = {}) {
       onReset: options.onReset,
       onNext: options.onNext,
     };
-  }, [options.onStart, options.onEnd, options.onTick]);
+  }, [options]);
+
+  useEffect(() => {
+    console.log("ASK OMER ABOUT THIS -- DEPENDENCY = 1 inital render?");
+
+    // sort events array by time
+    let descendingEvents = [...events].sort((a, b) => b.time - a.time);
+
+    // discard all events that have already occured
+    while (
+      descendingEvents.length !== 0 &&
+      descendingEvents[descendingEvents.length - 1].time < time
+    ) {
+      descendingEvents.pop();
+    }
+
+    // set eventsRef to new events
+    eventsRef.current = descendingEvents;
+  }, [events]);
 
   // Calculates how much time (ms) has passed since delta() was last called
   function delta() {
@@ -74,6 +94,15 @@ function useCountdown(duration, options = {}) {
     } else {
       callbacksRef.current.onTick();
     }
+
+    if (
+      eventsRef.current.length &&
+      eventsRef.current[eventsRef.current.length - 1].time <= nextTime
+    ) {
+      console.log(eventsRef.current[eventsRef.current.length - 1].time);
+      console.log(nextTime);
+      eventsRef.current.pop().callback();
+    }
   }
 
   /** Public Functions */
@@ -84,7 +113,13 @@ function useCountdown(duration, options = {}) {
         "Cannot start a countdown with duration less than 1000ms."
       );
     if (isRunning) throw Error("Stopwatch is already running");
-    callbacksRef.current.onStart();
+
+    if (!isStarted) {
+      callbacksRef.current.onFirstStart();
+      setIsStarted(true);
+    } else {
+      callbacksRef.current.onStart();
+    }
 
     if (!startTimeRef.current) {
       startTimeRef.current = Date.now();
@@ -99,19 +134,17 @@ function useCountdown(duration, options = {}) {
     callbacksRef.current.onStop();
   }
 
-  function next() {
-    setIsRunning(false);
-    setTime(0);
-    callbacksRef.current.onNext();
-  }
-
   function reset() {
     callbacksRef.current.onReset();
+    eventsRef.current = [...initialEventsRef.current].sort(
+      (a, b) => b.time - a.time
+    );
+    setIsStarted(false);
     setIsRunning(false);
     setTime(0);
   }
 
-  return { time, isRunning, start, stop, reset, next };
+  return { time, isRunning, start, stop, reset };
 }
 
 export default useCountdown;
