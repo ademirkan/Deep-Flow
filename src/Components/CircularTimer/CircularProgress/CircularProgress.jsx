@@ -1,10 +1,12 @@
 import styles from "./CircularProgress.modules.css";
 
 function CircularProgress({
-  percentFilled,
+  filledPercent,
   animationDuration = "1s",
   animationTimingFunction = "linear",
+  clockwise = false,
   thickness = 0.1,
+  primaryColor = "var(--primary-color)",
 }) {
   return (
     <>
@@ -15,9 +17,9 @@ function CircularProgress({
           cy="50"
           r="25"
           fillOpacity={0}
-          stroke="var(--primary-color)"
+          stroke={primaryColor}
           strokeWidth="50"
-          strokeDasharray={`${percentFilled * 157.08} 157.08`}
+          strokeDasharray={`${filledPercent * 157.08} 157.08`}
           style={{
             transition: `${animationDuration} ${animationTimingFunction}`,
           }}

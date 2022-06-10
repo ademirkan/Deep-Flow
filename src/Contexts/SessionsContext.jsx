@@ -9,7 +9,6 @@ export const SessionsContext = react.createContext({
 
 export default function SessionsProvider({ children }) {
   const [sessions, setSessions] = useLocalStorageState("sessions", []);
-
   return (
     <SessionsContext.Provider
       value={{

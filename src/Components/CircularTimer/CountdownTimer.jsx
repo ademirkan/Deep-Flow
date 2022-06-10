@@ -1,136 +1,132 @@
 import CircularProgress from "./CircularProgress/CircularProgress";
 import useCountdown from "../../Hooks/useCountdown";
+import useStopwatch from "../../Hooks/useStopwatch";
 import styles from "./CircularTimer.module.css";
-import ControlBar from "./ControlBar";
+import ControlBar, { ControlButton } from "./ControlBar";
 import { useContext, useState } from "react";
 import { TimerStateContext } from "../../Contexts/TimerStateContext";
 import { SessionsContext } from "../../Contexts/SessionsContext";
 import { formatTime } from "../../Helpers/formatTime";
 
-// SRP -- creates callbacks and delegates to
 export default function CountdownTimer({
   duration,
-  label = "",
-  onFinish = (start, stop, time) => {}, // call when timer reaches duration
-  onAbort = (start, stop, time) => {}, // call when timer is aborted before finishing
+  callbacks,
+  events,
   overtime = false,
+  viewConstructor = () => {},
 }) {
-  const { setIsRunning, setIsStarted } = useContext(TimerStateContext);
-  const { sessions, setSessions } = useContext(SessionsContext);
-  const [events, setEvents] = useState([
-    {
-      time: duration - 5 * 1000 * 60,
-      callback: () => {
-        console.log("5 Minutes left!");
-      },
-    },
-  ]);
+  const { time, isRunning, isStarted, start, stop, reset, finish, quit } =
+    useStopwatch(callbacks, events);
 
-  // 🤔 Timer callbacks, useCallback?
-  let callbacks = {
-    onFirstStart: () => {
-      setIsRunning(true);
-      setIsStarted(true);
-    },
-    onStart: () => {
-      setIsRunning(true);
-    },
-    onTick: () => {
-      console.log("Tick!");
-    },
-    onFinish: (startTime) => {
-      console.log("Finish");
-      let prevSessions = [...sessions];
-      prevSessions.push({
-        startTime: startTime,
-        endTime: Date.now(),
-        mode: label,
-      });
-      setSessions(prevSessions);
-
-      setIsRunning(false);
-      setIsStarted(false);
-      callback();
-    },
-    onReset: () => {
-      console.log("Reset!");
-      setIsRunning(false);
-      setIsStarted(false);
-    },
-    onStop: () => {
-      console.log("Stopped!");
-      setIsRunning(false);
-    },
-    onAbort: () => {
-      console.log("Abort, go next, progress will not be counted");
-      setIsRunning(false);
-      setIsStarted(false);
-      callback(); //
-    },
+  // props for viewConstructor
+  const props = {
+    // useStopwatch methods
+    duration,
+    isRunning,
+    isStarted,
+    overtime,
+    elapsedTime: time,
+    onStart: start,
+    onStop: stop,
+    onReset: reset,
+    onFinish: finish,
+    onQuit: quit,
   };
 
-  return (
-    <div className={styles.timerContainer}>
-      <CircularCountdownTimer
-        duration={duration}
-        label={label}
-        callbacks={callbacks}
-        events={events}
-      />
-    </div>
-  );
+  // if countdown ends
+  if (!overtime && time > duration) {
+    finish();
+  }
+
+  return <div className={styles.timerContainer}>{viewConstructor(props)}</div>;
 }
 
-function CircularCountdownTimer({
+export function CircularCountdownView({
   duration,
-  currentTime,
+  elapsedTime,
   label = "",
   clockwise = true,
+  onStart,
+  onStop,
+  onQuit,
+  onReset,
+  isRunning,
+  onFinish, // only used for overtime manual finish
 }) {
-  // if currentTime > duration, overtime
-  // Initialize useCountdown hook
-  // const timer = useCountdown(duration, callbacks, events);
-  // let remainingTime = duration - timer.time;
-  // const handleNext = () => {
-  //   callbacks.onAbort();
-  // };
-  // return (
-  //   <>
-  //     <CircularProgress
-  //       percentFilled={
-  //         timer.isRunning
-  //           ? (remainingTime - 900) / duration
-  //           : remainingTime / duration
-  //       }
-  //       thickness={0.03}
-  //       animationDuration={timer.isRunning ? "1s" : "0.15s"}
-  //     />
-  //     <div id={styles.innerUI}>
-  //       <div className="centered-container" style={{ gridArea: "label" }}>
-  //         <span
-  //           className={
-  //             styles.label +
-  //             " " +
-  //             (timer.isRunning ? styles.hidden : styles.visible)
-  //           }
-  //         >
-  //           {label}
-  //         </span>
-  //       </div>
-  //       <TextTimer
-  //         seconds={remainingTime / 1000}
-  //         style={{ color: "var(--title-color)" }}
-  //       />
-  //       <ControlBar
-  //         isRunning={timer.isRunning}
-  //         onStart={timer.start}
-  //         onStop={timer.stop}
-  //         onNext={handleNext}
-  //         onReset={timer.reset}
-  //       />
-  //     </div>
-  //   </>
-  // );
+  let remainingTime = duration - elapsedTime;
+
+  // calculate overtime duration
+  let overtimeMs = 0;
+  if (remainingTime < 0) {
+    overtimeMs = remainingTime * -1;
+  }
+
+  return (
+    <>
+      <CircularProgress
+        filledPercent={
+          isRunning
+            ? (remainingTime - 900) / duration
+            : remainingTime / duration
+        }
+        thickness={0.03}
+        animationDuration={isRunning ? "1s" : "0.15s"}
+      />
+
+      <div id={styles.innerUI}>
+        <div className="centered-container" style={{ gridArea: "label" }}>
+          <span
+            className={
+              styles.label + " " + (isRunning ? styles.hidden : styles.visible)
+            }
+          >
+            {label}
+          </span>
+        </div>
+        <TextTimer
+          seconds={remainingTime / 1000}
+          style={{ color: "var(--title-color)" }}
+        />
+        {overtimeMs === 0 ? (
+          <ControlBar isRunning={isRunning}>
+            {!isRunning ? (
+              <ControlButton
+                icon={
+                  <i className="fa-solid centered-container fa-circle-play control-icon text-3xl " />
+                }
+                onClick={onStart}
+              />
+            ) : overtimeMs === 0 ? (
+              <>
+                <ControlButton
+                  icon={
+                    <i className="fa-solid centered-container fa-clock-rotate-left control-icon" />
+                  }
+                  onClick={onReset}
+                />
+                <ControlButton
+                  icon={
+                    <i className="fa-solid centered-container fa-circle-pause control-icon text-3xl" />
+                  }
+                  onClick={onStop}
+                />
+                <ControlButton
+                  icon={
+                    <i className="fa-solid centered-container fa-circle-chevron-right control-icon"></i>
+                  }
+                  onClick={onQuit}
+                />
+              </>
+            ) : (
+              <div className="button">break</div>
+            )}
+          </ControlBar>
+        ) : (
+          <div className="button">yeet</div>
+        )}
+      </div>
+    </>
+  );
 }
 
 function TextTimer({ seconds, style = {} }) {

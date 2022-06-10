@@ -9,24 +9,19 @@ import { StopwatchMode } from "../../../Components/StopwatchMode";
 export default function Config() {
   const { isRunning } = useContext(TimerStateContext);
   const [mode, setMode] = useLocalStorageState("studyMode", "pomodoro");
-  const [config, setConfig1] = useState(<div></div>);
+  const [config, setConfig] = useState(<div></div>);
 
   function handleSelect(m, config = {}) {
-    console.log("handleselect " + m);
     if (m !== mode) {
       setMode(m);
     }
-    if (config) setConfig1(() => config);
+    if (config) setConfig(() => config);
   }
 
-  function setConfig(config) {
-    console.log("SETTING CONFIG");
-    console.log(config);
-    setConfig1(config);
-  }
   const modes = {
     pomodoro: (isActive) => (
       <PomodoroMode
+        key="pomodoro"
         isActive={isActive}
         onSelect={handleSelect}
         setConfig={setConfig}
@@ -34,6 +29,7 @@ export default function Config() {
     ),
     stopwatch: (isActive) => (
       <StopwatchMode
+        key="stopwatch"
         isActive={isActive}
         onSelect={handleSelect}
         setConfig={setConfig}

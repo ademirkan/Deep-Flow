@@ -133,7 +133,6 @@ export const StopwatchMode = ({ isActive, onSelect, setConfig }) => {
   // First mount
   useEffect(() => {
     if (isActive) {
-      console.log("FIRST STOPWATCH RENDER");
       progressContext.setDailyTarget(stopwatchDailyTarget);
       progressContext.setSessionLength(longBreakReq);
 
@@ -147,8 +146,6 @@ export const StopwatchMode = ({ isActive, onSelect, setConfig }) => {
   // Rerenders -- listen to isActive, config states, and session trackers
   useEffect(() => {
     if (isActive) {
-      console.log("STOPWATCH RERENDER");
-
       // setSchedule
       setScheduler(scheduler.label, scheduler.currentTimer, scheduler.next);
       setConfig(() => scheduler.config);

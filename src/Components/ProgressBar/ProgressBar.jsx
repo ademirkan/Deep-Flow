@@ -6,7 +6,6 @@ import Popup from "reactjs-popup";
 import { ProgressbarContext } from "./../../Contexts/ProgressbarContext";
 
 export default function Progress() {
-  // const [sessions, setSessions] = useLocalStorageState("sessions", []);
   const { sessions, setSessions } = useContext(SessionsContext);
   const { dailyTarget, sessionLength } = useContext(ProgressbarContext);
 

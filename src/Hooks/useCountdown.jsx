@@ -17,8 +17,6 @@ function useCountdown(duration, options = {}, events = []) {
     onTick: options.onTick, // called for each tick interval
     onStop: options.onStop, // called for each pause
     onReset: options.onReset, // called when timer is reset
-    onNext: options.onNext, // NOT NEEDED
-    onAbort: options.onAbort, // called when timer is ended early
   });
   const startTimeRef = useRef(null);
   const eventsRef = useRef([...events]);
@@ -40,12 +38,12 @@ function useCountdown(duration, options = {}, events = []) {
 
   useEffect(() => {
     callbacksRef.current = {
+      onFirstStart: options.onFirstStart,
       onStart: options.onStart,
       onFinish: options.onFinish,
       onTick: options.onTick,
       onStop: options.onStop,
       onReset: options.onReset,
-      onNext: options.onNext,
     };
   }, [options]);
 
@@ -112,7 +110,7 @@ function useCountdown(duration, options = {}, events = []) {
       throw new Error(
         "Cannot start a countdown with duration less than 1000ms."
       );
-    if (isRunning) throw Error("Stopwatch is already running");
+    if (isRunning) throw Error("Countdown is already running");
 
     if (!isStarted) {
       callbacksRef.current.onFirstStart();
