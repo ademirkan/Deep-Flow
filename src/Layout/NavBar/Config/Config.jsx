@@ -43,17 +43,12 @@ export default function Config() {
     <div id={styles.config} className={isRunning ? "hidden" : "visible"}>
       <span id="config-mode">
         {Object.entries(modes).map((m) => {
-          console.log(mode);
-          console.log(m[0]);
-          console.log(m[0] === mode);
-          console.log(typeof m[0]);
-          console.log(typeof mode);
           return m[1](m[0] === mode);
         })}
       </span>
       <Popup
         trigger={
-          <i className="fa-solid fa-screwdriver-wrench relative inline mx-1 h-1 w-1 "></i>
+          <i className="fa-solid fa-screwdriver-wrench relative inline mx-1 h-1 w-1 mr-2 cursor-pointer text-primary"></i>
         }
         modal
         nested

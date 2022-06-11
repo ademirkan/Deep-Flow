@@ -1,7 +1,9 @@
 #config {
+  position: relative;
   font-family: "Roboto Mono", monospace;
   font-size: 0.7rem;
   font-weight: 300;
+  top: 0.25rem;
   grid-area: config;
   color: var(--secondary-color);
   display: grid;

@@ -1,24 +1,24 @@
 import { useState, useEffect } from "react";
-/**
- * Hook that stores value as a state and converts to JSON string to store in session storage.
- * Setter value should be a JSON object
- * @param {String} key
- * @param {JSON} init -- initial JSON value to store with {sessionStorage.setItem()}
- * @returns
- */
+
 export default function useSessionStorageState(key, init) {
   // if exists in session storage, use that. Else, use init (make sure to account for string JSON).
-  let currValueString = sessionStorage.getItem(key);
-  init = currValueString
-    ? JSON.parse(currValueString)
-    : typeof init === "string"
-    ? `"${init}"`
-    : init;
+  let currSessionStorageString = sessionStorage.getItem(key);
 
+  // initial value to be stored in state
+  init = currSessionStorageString ? JSON.parse(currSessionStorageString) : init;
+
+  // State
   const [state, setState] = useState(init);
+
+  // set initial storage value if nothing is currently stored in key
   useEffect(() => {
-    if (!currValueString) sessionStorage.setItem(key, init);
+    if (!currSessionStorageString)
+      sessionStorage.setItem(
+        key,
+        typeof init === "string" ? `"${init}"` : init
+      );
   }, []);
+
   return [
     state,
     (value) => {

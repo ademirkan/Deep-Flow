@@ -9,9 +9,11 @@
 
 .mode {
   color: var(--secondary-color);
+  padding: 0.125rem;
 }
 
 .mode:hover {
+  cursor: pointer;
   color: var(--title-color);
 }
 
