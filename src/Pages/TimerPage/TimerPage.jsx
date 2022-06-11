@@ -134,7 +134,7 @@ function Timer() {
   return currentTimer ? (
     timerByTypes[`${currentTimer.type}`](currentTimer)
   ) : (
-    <div>t</div>
+    <div>error, please choose a timer mode</div>
   );
 }
 

@@ -9,16 +9,16 @@ import { useState, useEffect } from "react";
 
 export default function useLocalStorageState(key, init) {
   // if exists in local storage, use that. Else, use init (make sure to account for string JSON).
-  let currValueString = localStorage.getItem(key);
-  init = currValueString
-    ? JSON.parse(currValueString)
-    : typeof init === "string"
-    ? `"${init}"`
-    : init;
+  let currLocalStorageString = localStorage.getItem(key);
+
+  // sets initial state
+  init = currLocalStorageString ? JSON.parse(currLocalStorageString) : init;
+
+  const initJSON = typeof init === "string" ? `"${init}"` : init;
 
   const [state, setState] = useState(init);
   useEffect(() => {
-    if (!currValueString) localStorage.setItem(key, init);
+    if (!currLocalStorageString) localStorage.setItem(key, initJSON);
   }, []);
   return [
     state,

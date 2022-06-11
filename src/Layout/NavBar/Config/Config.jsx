@@ -42,7 +42,14 @@ export default function Config() {
   return (
     <div id={styles.config} className={isRunning ? "hidden" : "visible"}>
       <span id="config-mode">
-        {Object.entries(modes).map((m) => m[1](m[0] === mode))}
+        {Object.entries(modes).map((m) => {
+          console.log(mode);
+          console.log(m[0]);
+          console.log(m[0] === mode);
+          console.log(typeof m[0]);
+          console.log(typeof mode);
+          return m[1](m[0] === mode);
+        })}
       </span>
       <Popup
         trigger={
@@ -55,50 +62,4 @@ export default function Config() {
       </Popup>
     </div>
   );
-
-  // return (
-  //   <div id={styles.config} className={isRunning ? "hidden" : "visible"}>
-  //     <span id="config-mode">
-  //       <span className={styles.configOption + " " + styles.configOptionActive}>
-  //         pomodoro
-  //       </span>
-  //       <span
-  //         className={styles.configOption}
-  //         onClick={() => setMode("stopwatch")}
-  //       >
-  //         stopwatch
-  //       </span>
-  //       <span className={styles.configOption}>deepwork</span>
-  //       <Popup
-  //         trigger={
-  //           <i className="fa-solid fa-screwdriver-wrench relative inline mx-1 h-1 w-1 "></i>
-  //         }
-  //         modal
-  //         nested
-  //       >
-  //         {mode.config}
-  //       </Popup>
-  //     </span>
-
-  //     <span id="config-timer">
-  //       <span className={styles.configOption + " " + styles.configOptionActive}>
-  //         overtime
-  //       </span>
-  //       <span className={styles.configOption + " "}>mute</span>
-  //       <span className={styles.configOption + " "}>autostart</span>
-  //     </span>
-
-  //     {mode.label === "pomodoro" && (
-  //       <span id="config-pomodoro">
-  //         <span
-  //           className={styles.configOption + " " + styles.configOptionActive}
-  //         >
-  //           study
-  //         </span>
-  //         <span className={styles.configOption + " "}>short</span>
-  //         <span className={styles.configOption + " "}>long</span>
-  //       </span>
-  //     )}
-  //   </div>
-  // );
 }
