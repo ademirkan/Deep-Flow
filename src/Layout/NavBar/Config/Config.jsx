@@ -7,10 +7,14 @@ import { PomodoroMode } from "./../../../Components/PomodoroMode";
 import { StopwatchMode } from "../../../Components/StopwatchMode";
 
 export default function Config() {
+  // Contexts
   const { isRunning } = useContext(TimerStateContext);
+
+  // States
   const [mode, setMode] = useLocalStorageState("studyMode", "pomodoro");
   const [config, setConfig] = useState(<div></div>);
 
+  // Handlers
   function handleSelect(m, config = {}) {
     if (m !== mode) {
       setMode(m);
@@ -18,6 +22,7 @@ export default function Config() {
     if (config) setConfig(() => config);
   }
 
+  // TODO -- optimize? useCallback?
   const modes = {
     pomodoro: (isActive) => (
       <PomodoroMode

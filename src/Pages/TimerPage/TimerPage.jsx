@@ -23,15 +23,16 @@ function TimerPage() {
 }
 
 function Timer() {
+  // Contexts
   const { currentTimer, next } = useContext(SchedulerContext).scheduler;
   const { setIsRunning, setIsStarted } = useContext(TimerStateContext);
   const { sessions, setSessions } = useContext(SessionsContext);
 
-  // refactor this out later
-  const [popupOpen, setPopupOpen] = useState(false);
-  const closePopup = () => setPopupOpen(false);
+  // // refactor this out later
+  // const [popupOpen, setPopupOpen] = useState(false);
+  // const closePopup = () => setPopupOpen(false);
 
-  // onFirstStart, onStart, onTick, onFinish, onFinishEarly, onReset, onStop
+  // TODO -- useCallback?
   const callbacks = {
     onFirstStart: (time) => {
       setIsRunning(true);
@@ -45,7 +46,7 @@ function Timer() {
     },
     onFinish: (time, elapsedTime, startTime) => {
       // call modal
-      setPopupOpen(true);
+
       // on modal submit, execute this
       let prevSessions = [...sessions];
       prevSessions.push({

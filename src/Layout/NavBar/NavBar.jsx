@@ -10,7 +10,9 @@ import {
 } from "../../Assets/NavbarIcons";
 
 function NavBar() {
+  // Context
   const { isStarted, isRunning } = useContext(TimerStateContext);
+
   return (
     <div id={styles.NavBar}>
       <Logo className={isRunning && styles.focusedLogo} />
