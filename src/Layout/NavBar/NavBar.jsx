@@ -24,7 +24,11 @@ function NavBar() {
 }
 
 function Logo({ className }) {
-  return <div className={styles.logo + " " + className}>deepflow</div>;
+  return (
+    <Link to="/">
+      <div className={styles.logo + " " + className}>deepflow</div>
+    </Link>
+  );
 }
 
 function Menu({ className }) {
