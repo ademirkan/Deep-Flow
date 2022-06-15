@@ -1,6 +1,4 @@
 # [deepflow](https://deep-flow.vercel.app/)
-<<<<<<< HEAD
-
 What gets tracked gets managed
 
 ---
