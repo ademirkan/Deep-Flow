@@ -1,7 +1,5 @@
 import react, { useState, useRef } from "react";
 
-import useLocalStorageState from "../Hooks/useLocalStorageState";
-
 /**
  * Scheduler = {mode: "pomodoro, stopwatch, custom",
  *              currentTimer={type: countdown, stopwatch, label="study, break, etc", duration},

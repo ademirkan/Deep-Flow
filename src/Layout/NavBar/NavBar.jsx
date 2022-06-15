@@ -8,6 +8,7 @@ import {
   ShareIcon,
   SettingsIcon,
 } from "../../Assets/NavbarIcons";
+import { Link } from "react-router-dom";
 
 function NavBar() {
   // Context
@@ -29,18 +30,18 @@ function Logo({ className }) {
 function Menu({ className }) {
   return (
     <div id={styles.menu} className={className}>
-      <a href="/">
+      <Link to="/">
         <TimerIcon className={"icon"} />
-      </a>
-      <a href="/">
+      </Link>
+      <Link to="/oops">
         <ChartIcon className={"icon"} />
-      </a>
-      <a href="/">
+      </Link>
+      <Link to="/oops">
         <ShareIcon className={"icon"} />
-      </a>
-      <a href="/">
+      </Link>
+      <Link to="/oops">
         <SettingsIcon className={"icon"} />
-      </a>
+      </Link>
     </div>
   );
 }

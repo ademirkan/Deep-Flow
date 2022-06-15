@@ -1,11 +1,11 @@
 import "./App.css";
-import Footer from "./Layout/Footer/Footer";
 import TimerPage from "./Pages/TimerPage/TimerPage";
-import NavBar from "./Layout/NavBar/NavBar";
+import NotReadyPage from "./Pages/NotReadyPage";
 import TimerStateProvider from "./Contexts/TimerStateContext";
 import SessionsProvider from "./Contexts/SessionsContext";
 import ProgressbarProvider from "./Contexts/ProgressbarContext";
 import SchedulerProvider from "./Contexts/SchedulerContext";
+import { Route, Routes } from "react-router-dom";
 
 //🤔 multiContexts?
 
@@ -15,11 +15,10 @@ function App() {
       <TimerStateProvider>
         <SchedulerProvider>
           <SessionsProvider>
-            <div id="display">
-              <NavBar />
-              <TimerPage />
-              <Footer />
-            </div>
+            <Routes>
+              <Route path="/" element={<TimerPage />} />
+              <Route path="/oops" element={<NotReadyPage />} />
+            </Routes>
           </SessionsProvider>
         </SchedulerProvider>
       </TimerStateProvider>

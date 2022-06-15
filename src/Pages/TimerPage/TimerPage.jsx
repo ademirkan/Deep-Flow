@@ -9,16 +9,19 @@ import { SessionsContext } from "../../Contexts/SessionsContext";
 import StopwatchTimer, {
   CircularStopwatchView,
 } from "./../../Components/CircularTimer/StopwatchTimer";
+import PageLayout from "../../Layout/PageLayout";
 
 function TimerPage() {
   return (
-    <div
-      className="flex justify-center items-center flex-col mt-16"
-      style={{ gridArea: "main" }}
-    >
-      <Timer />
-      <Progress />
-    </div>
+    <PageLayout>
+      <div
+        className="flex justify-center items-center flex-col mt-16"
+        style={{ gridArea: "main" }}
+      >
+        <Timer />
+        <Progress />
+      </div>
+    </PageLayout>
   );
 }
 
@@ -32,7 +35,7 @@ function Timer() {
   // const [popupOpen, setPopupOpen] = useState(false);
   // const closePopup = () => setPopupOpen(false);
 
-  // TODO -- useCallback?
+  //const thing = useMemo(()=>getThingFromExpensiveComputation(giantString), [giantString])
   const callbacks = {
     onFirstStart: (time) => {
       setIsRunning(true);
@@ -104,7 +107,7 @@ function Timer() {
   const timerByTypes = {
     countdown: (timer) => (
       <CountdownTimer
-        duration={timer.duration === 1000 * 60 ? 2000 : timer.duration}
+        duration={timer.duration === 1000 * 60 ? 5000 : timer.duration}
         callbacks={callbacks}
         overtime={false}
         events={countdownEvents}
@@ -121,7 +124,7 @@ function Timer() {
         minimumDuration={timer.duration === 1000 * 60 ? 5000 : timer.duration}
         callbacks={callbacks}
         overtime={false}
-        events={countdownEvents}
+        events={stopwatchEvents}
         viewConstructor={(props) => (
           <CircularStopwatchView
             {...props}
