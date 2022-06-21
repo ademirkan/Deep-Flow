@@ -1,15 +1,11 @@
 import styles from "./Config.module.css";
 import { useState, useContext } from "react";
-import { TimerStateContext } from "../../../Contexts/TimerStateContext";
 import Popup from "reactjs-popup";
 import useLocalStorageState from "./../../../Hooks/useLocalStorageState";
 import { PomodoroMode } from "./../../../Components/PomodoroMode";
 import { StopwatchMode } from "../../../Components/StopwatchMode";
 
-export default function Config() {
-  // Contexts
-  const { isRunning } = useContext(TimerStateContext);
-
+export default function Config({ isVisible = true }) {
   // States
   const [mode, setMode] = useLocalStorageState("studyMode", "pomodoro");
   const [config, setConfig] = useState(<div></div>);
@@ -45,7 +41,7 @@ export default function Config() {
   };
 
   return (
-    <div id={styles.config} className={isRunning ? "hidden" : "visible"}>
+    <div id={styles.config} className={isVisible ? "visible" : "hidden"}>
       <span id="config-mode">
         {Object.entries(modes).map((m) => {
           return m[1](m[0] === mode);

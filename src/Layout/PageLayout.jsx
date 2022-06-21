@@ -4,7 +4,7 @@ import Footer from "./Footer/Footer";
 export default function PageLayout(props) {
   return (
     <div id="display">
-      <NavBar />
+      <NavBar isActive={props.isRunning} actionArea={props.actionArea} />
       {props.children}
       <Footer />
     </div>

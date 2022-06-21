@@ -95,6 +95,7 @@ export const CircularStopwatchView = ({
     </>
   );
 };
+
 function TextTimer({ seconds, style = {} }) {
   return (
     <div className={styles.textTimer} style={style}>

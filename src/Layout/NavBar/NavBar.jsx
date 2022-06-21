@@ -10,15 +10,13 @@ import {
 } from "../../Assets/NavbarIcons";
 import { Link } from "react-router-dom";
 
-function NavBar() {
-  // Context
-  const { isStarted, isRunning } = useContext(TimerStateContext);
-
+function NavBar({ isActive = true, actionArea = <></> }) {
   return (
     <div id={styles.NavBar}>
-      <Logo className={isRunning && styles.focusedLogo} />
-      <Menu className={isStarted ? "hidden" : "visible"} />
-      <Config className={isStarted ? "hidden" : "visible"} />
+      <Logo className={isActive && styles.focusedLogo} />
+      <Menu className={isActive ? "hidden" : "visible"} />
+      {/* if actionArea is a function, call it. If its html, display it */}
+      {typeof actionArea == "function" ? actionArea() : actionArea}
     </div>
   );
 }

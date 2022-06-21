@@ -1,19 +1,26 @@
-import Progress from "../../Components/ProgressBar/ProgressBar";
+import Progress from "../Components/ProgressBar/ProgressBar";
 import { useContext, useRef, useState } from "react";
-import { SchedulerContext } from "./../../Contexts/SchedulerContext";
+import { SchedulerContext } from "../Contexts/SchedulerContext";
 import CountdownTimer, {
   CircularCountdownView,
-} from "./../../Components/CircularTimer/CountdownTimer";
-import { TimerStateContext } from "../../Contexts/TimerStateContext";
-import { SessionsContext } from "../../Contexts/SessionsContext";
+} from "../Components/CircularTimer/CountdownTimer";
+import { TimerStateContext } from "../Contexts/TimerStateContext";
+import { SessionsContext } from "../Contexts/SessionsContext";
 import StopwatchTimer, {
   CircularStopwatchView,
-} from "./../../Components/CircularTimer/StopwatchTimer";
-import PageLayout from "../../Layout/PageLayout";
+} from "../Components/CircularTimer/StopwatchTimer";
+import PageLayout from "../Layout/PageLayout";
+import Config from "../Layout/NavBar/Config/Config";
 
 function TimerPage() {
+  // isRunning, isStarted
+  const { isRunning, isStarted } = useContext(TimerStateContext);
+
   return (
-    <PageLayout>
+    <PageLayout
+      isRunning={isRunning}
+      actionArea={<Config isVisible={!isRunning} />}
+    >
       <div
         className="flex justify-center items-center flex-col mt-16"
         style={{ gridArea: "main" }}
@@ -26,15 +33,10 @@ function TimerPage() {
 }
 
 function Timer() {
-  // Contexts
-  const { currentTimer, next } = useContext(SchedulerContext).scheduler;
+  // STATE
+  const { mode, currentTimer, next } = useContext(SchedulerContext).scheduler;
   const { setIsRunning, setIsStarted } = useContext(TimerStateContext);
   const { sessions, setSessions } = useContext(SessionsContext);
-
-  // // refactor this out later
-  // const [popupOpen, setPopupOpen] = useState(false);
-  // const closePopup = () => setPopupOpen(false);
-
   //const thing = useMemo(()=>getThingFromExpensiveComputation(giantString), [giantString])
   const callbacks = {
     onFirstStart: (time) => {
@@ -123,7 +125,6 @@ function Timer() {
       <StopwatchTimer
         minimumDuration={timer.duration === 1000 * 60 ? 5000 : timer.duration}
         callbacks={callbacks}
-        overtime={false}
         events={stopwatchEvents}
         viewConstructor={(props) => (
           <CircularStopwatchView

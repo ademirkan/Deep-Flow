@@ -2,7 +2,6 @@ import { SESSION_LABEL } from "../../Helpers/enum";
 import { useContext, useEffect } from "react";
 import { SessionsContext } from "./../../Contexts/SessionsContext";
 import { isDateToday } from "./../../Helpers/checkDate";
-import Popup from "reactjs-popup";
 import { ProgressbarContext } from "./../../Contexts/ProgressbarContext";
 
 export default function Progress() {

@@ -1,5 +1,5 @@
 import "./App.css";
-import TimerPage from "./Pages/TimerPage/TimerPage";
+import TimerPage from "./Pages/TimerPage";
 import NotReadyPage from "./Pages/NotReadyPage";
 import TimerStateProvider from "./Contexts/TimerStateContext";
 import SessionsProvider from "./Contexts/SessionsContext";
