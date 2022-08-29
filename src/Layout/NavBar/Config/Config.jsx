@@ -18,7 +18,7 @@ export default function Config({ isVisible = true }) {
     if (config) setConfig(() => config);
   }
 
-  // TODO -- optimize? useCallback?
+  // TODO -- optimize? useCallback? useMemo?
   const modes = {
     pomodoro: (isActive) => (
       <PomodoroMode

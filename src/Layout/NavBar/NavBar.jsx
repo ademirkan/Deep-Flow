@@ -10,16 +10,17 @@ import {
 } from "../../Assets/NavbarIcons";
 import { Link } from "react-router-dom";
 
+//********************************************************************************
 function NavBar({ isActive = true, actionArea = <></> }) {
   return (
     <div id={styles.NavBar}>
       <Logo className={isActive && styles.focusedLogo} />
       <Menu className={isActive ? "hidden" : "visible"} />
-      {/* if actionArea is a function, call it. If its html, display it */}
       {typeof actionArea == "function" ? actionArea() : actionArea}
     </div>
   );
 }
+//********************************************************************************
 
 function Logo({ className }) {
   return (
