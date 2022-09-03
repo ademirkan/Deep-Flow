@@ -24,7 +24,7 @@ export default function PageLayout({
         <Logo isFocused={isFocused} />
 
         {/* Navbar */}
-        <nav className={isFocused ? "visible" : "hidden"}>
+        <nav className={isFocused ? "_visible" : "_hidden"}>
           <ul>
             <li>
               <Link to="/">
@@ -54,7 +54,7 @@ export default function PageLayout({
 
         <div
           id="headerActionAreaWrapper"
-          className={isFocused ? "visible" : "hidden"}
+          className={isFocused ? "_visible" : "_hidden"}
         >
           {typeof headerActionArea == "function"
             ? headerActionArea()
@@ -72,7 +72,7 @@ export default function PageLayout({
 function Logo({ isFocused }) {
   return (
     <Link to="/">
-      <div id="logo" className={isFocused ? "focusLogo" : ""}>
+      <div id="logo" className={isFocused ? "focusLogo" : "unfocusLogo"}>
         deepflow
       </div>
     </Link>
