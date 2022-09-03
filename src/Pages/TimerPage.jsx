@@ -21,7 +21,7 @@ function TimerPage() {
       isFocused={!isRunning}
       headerActionArea={<QuickTimerConfig />}
       mainProps={{
-        className: "flex justify-center items-center flex-col mt-16 bg-black",
+        className: "flex justify-center items-center flex-col mt-16",
       }}
     >
       <Timer />
