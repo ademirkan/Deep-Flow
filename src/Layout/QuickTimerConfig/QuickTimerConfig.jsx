@@ -41,7 +41,7 @@ export default function QuickTimerConfig({ isVisible = true }) {
   };
 
   return (
-    <div id={styles.config} className={isVisible ? "visible" : "hidden"}>
+    <div id={styles.config}>
       <span id="config-mode">
         {Object.entries(modes).map((m) => {
           return m[1](m[0] === mode);

@@ -75,14 +75,14 @@ nav > ul {
 }
 
 /* opacity transitions */
-.hidden {
-  transition: 150ms ease-in-out;
+._hidden {
+  transition: 200ms ease-in-out;
   opacity: 0%;
   visibility: hidden;
 }
 
-.visible {
-  transition: opacity 150ms ease-in-out;
+._visible {
+  transition: opacity 200ms ease-in-out;
   opacity: 100%;
 }
 
