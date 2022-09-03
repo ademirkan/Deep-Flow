@@ -10,7 +10,7 @@ import StopwatchTimer, {
   CircularStopwatchView,
 } from "../Components/CircularTimer/StopwatchTimer";
 import PageLayout from "../Layout/PageLayout";
-import Config from "../Layout/NavBar/Config/Config";
+import QuickTimerConfig from "../Layout/QuickTimerConfig/QuickTimerConfig";
 
 function TimerPage() {
   // isRunning, isStarted
@@ -18,16 +18,14 @@ function TimerPage() {
 
   return (
     <PageLayout
-      isRunning={isRunning}
-      actionArea={<Config isVisible={!isRunning} />}
+      isFocused={!isRunning}
+      headerActionArea={<QuickTimerConfig />}
+      mainProps={{
+        className: "flex justify-center items-center flex-col mt-16 bg-black",
+      }}
     >
-      <div
-        className="flex justify-center items-center flex-col mt-16"
-        style={{ gridArea: "main" }}
-      >
-        <Timer />
-        <Progress />
-      </div>
+      <Timer />
+      <Progress />
     </PageLayout>
   );
 }
