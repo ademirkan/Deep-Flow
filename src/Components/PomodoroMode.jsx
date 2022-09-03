@@ -16,7 +16,7 @@ import Setting, {
 
 import styles from "./Mode.module.css";
 
-export const PomodoroMode = ({ isActive, onSelect, setConfig }) => {
+export const PomodoroMode = ({ isActive, onSelect, setConfig, children }) => {
   const name = STUDY_MODE.POMODORO;
 
   // Contexts

@@ -1,11 +1,11 @@
-import styles from "./Config.module.css";
+import styles from "./QuickTimerConfig.module.css";
 import { useState, useContext } from "react";
 import Popup from "reactjs-popup";
-import useLocalStorageState from "./../../../Hooks/useLocalStorageState";
-import { PomodoroMode } from "./../../../Components/PomodoroMode";
-import { StopwatchMode } from "../../../Components/StopwatchMode";
+import useLocalStorageState from "../../Hooks/useLocalStorageState";
+import { PomodoroMode } from "../../Components/PomodoroMode";
+import { StopwatchMode } from "../../Components/StopwatchMode";
 
-export default function Config({ isVisible = true }) {
+export default function QuickTimerConfig({ isVisible = true }) {
   // States
   const [mode, setMode] = useLocalStorageState("studyMode", "pomodoro");
   const [config, setConfig] = useState(<div></div>);
@@ -18,7 +18,7 @@ export default function Config({ isVisible = true }) {
     if (config) setConfig(() => config);
   }
 
-  // TODO -- optimize? useCallback?
+  // TODO -- optimize? useCallback? useMemo?
   const modes = {
     pomodoro: (isActive) => (
       <PomodoroMode
