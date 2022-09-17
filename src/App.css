@@ -138,6 +138,10 @@ nav > ul {
   border-radius: 0.75rem;
 }
 
+#popup-root {
+  position: absolute;
+}
+
 .popup-arrow {
   color: rgb(255, 255, 255);
 }
