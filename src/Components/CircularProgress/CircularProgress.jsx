@@ -1,13 +1,13 @@
 import styles from "./CircularProgress.modules.css";
 
-function CircularProgress({
+const CircularProgress = ({
   filledPercent,
   animationDuration = "1s",
   animationTimingFunction = "linear",
   clockwise = false,
   thickness = 0.1,
   primaryColor = "var(--primary-color)",
-}) {
+}) => {
   return (
     <>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -34,6 +34,6 @@ function CircularProgress({
       </svg>
     </>
   );
-}
+};
 
 export default CircularProgress;
