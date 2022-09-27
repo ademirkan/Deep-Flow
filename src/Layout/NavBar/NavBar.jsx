@@ -1,7 +1,4 @@
 import styles from "./NavBar.module.css";
-import Config from "./Config/Config";
-import { TimerStateContext } from "../../Contexts/TimerStateContext";
-import { useContext } from "react";
 import {
   ChartIcon,
   TimerIcon,

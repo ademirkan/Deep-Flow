@@ -1,7 +1,7 @@
 import { GithubIcon, ThemeIcon, InfoIcon } from "../../Assets/FooterIcons";
 import styles from "./Footer.module.css";
 import { useContext } from "react";
-import { TimerStateContext } from "./../../Contexts/TimerStateContext";
+import { TimerStateContext } from "./../../Contexts/TimerStateContext.tsx";
 
 function Footer() {
   const { isRunning } = useContext(TimerStateContext);

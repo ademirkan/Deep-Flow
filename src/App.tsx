@@ -6,7 +6,7 @@ import SessionsProvider from "./Contexts/SessionsContext";
 import ProgressbarProvider from "./Contexts/ProgressbarContext";
 import SchedulerProvider from "./Contexts/SchedulerContext";
 import { Route, Routes } from "react-router-dom";
-
+import React from "react";
 //🤔 multiContexts?
 
 function App() {

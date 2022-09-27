@@ -1,10 +1,10 @@
-import react, { useState } from "react";
+import React, { useState } from "react";
 
-export const TimerStateContext = react.createContext({
+export const TimerStateContext = React.createContext({
   isRunning: false,
   isStarted: false,
-  setIsRunning: () => {},
-  setIsStarted: () => {},
+  setIsRunning: (bool: boolean) => {},
+  setIsStarted: (bool: boolean) => {},
 });
 
 export default function TimerStateProvider({ children }) {

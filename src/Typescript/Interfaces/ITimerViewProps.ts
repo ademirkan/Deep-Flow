@@ -9,5 +9,5 @@ export interface ITimerViewProps {
   onPause: () => void;
   onReset: () => void;
   onFinish?: () => void;
-  label?: string;
+  // label?: string;
 }

@@ -141,3 +141,12 @@ input::-webkit-inner-spin-button {
 .button.input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.timerContainer {
+  position: relative;
+  height: min(300px, 100%);
+  width: min(300px, 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

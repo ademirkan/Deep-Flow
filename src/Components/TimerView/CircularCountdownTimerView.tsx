@@ -1,9 +1,9 @@
 import React from "react";
 import CircularProgress from "../CircularProgress/CircularProgress";
 import styles from "./CircularTimerView.module.css";
-import { formatTime } from "../../Helpers/formatTime";
+import { formatTime } from "../../Helpers/formatTime.ts";
 
-export function CircularCountdownTimerView({
+export default function CircularCountdownTimerView({
   duration,
   elapsedTime,
   label = "",
@@ -25,7 +25,7 @@ export function CircularCountdownTimerView({
 
   return (
     <>
-      <CircularProgress
+      {/* <CircularProgress
         filledPercent={
           isRunning
             ? (remainingTime - 900) / duration
@@ -86,7 +86,7 @@ export function CircularCountdownTimerView({
         ) : (
           <div className="button">yeet</div>
         )}
-      </div>
+      </div> */}
     </>
   );
 }

@@ -1,55 +1,53 @@
 import Progress from "../Components/ProgressBar/ProgressBar";
-import { useContext, useRef, useState } from "react";
+import { useContext } from "react";
 import { SchedulerContext } from "../Contexts/SchedulerContext";
-import CountdownTimer, {
-  CircularCountdownView,
-} from "../Components/CircularTimer/CountdownTimer";
+import CountdownTimer from "../Components/Timer/CountdownTimer";
+import CircularCountdownTimerView from "../Components/TimerView/CircularCountdownTimerView";
 import { TimerStateContext } from "../Contexts/TimerStateContext";
 import { SessionsContext } from "../Contexts/SessionsContext";
-
-import PageLayout from "../Layout/PageLayout";
-import QuickTimerConfig from "../Layout/QuickTimerConfig/QuickTimerConfig";
-import { CircularStopwatchTimerView } from "../Components/TimerView/CircularStopwatchTimerView";
 import StopwatchTimer from "../Components/Timer/StopwatchTimer";
-import { ITimerViewProps } from "../Typescript/Interfaces/ITimerViewProps";
+import CircularStopwatchView from "../Components/TimerView/CircularStopwatchView";
+import PageLayout from "../Layout/PageLayout";
+import Config from "../Layout/NavBar/Config/Config";
+import { ITimerCallbacks } from "../Typescript/Interfaces/ITimerCallbacks";
 import React from "react";
-
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
+import { TimerEvent } from "../Typescript/Types/TimerEvent";
 function TimerPage() {
   // isRunning, isStarted
   const { isRunning, isStarted } = useContext(TimerStateContext);
 
   return (
     <PageLayout
-      isFocused={!isRunning}
-      headerActionArea={<QuickTimerConfig />}
-      mainProps={{
-        className: "flex justify-center items-center flex-col mt-16",
-      }}
+      isRunning={isRunning}
+      actionArea={<Config isVisible={!isRunning} />}
     >
-      <TimerContainer />
-      <Progress />
+      <div
+        className="flex justify-center items-center flex-col mt-16"
+        style={{ gridArea: "main" }}
+      >
+        <Timer />
+        <Progress />
+      </div>
     </PageLayout>
   );
 }
 
-function TimerContainer() {
+function Timer() {
   // STATE
   const { mode, currentTimer, next } = useContext(SchedulerContext).scheduler;
   const { setIsRunning, setIsStarted } = useContext(TimerStateContext);
   const { sessions, setSessions } = useContext(SessionsContext);
-
-  const callbacks = {
-    onFirstStart: (time) => {
+  //const thing = useMemo(()=>getThingFromExpensiveComputation(giantString), [giantString])
+  const callbacks: ITimerCallbacks = {
+    onStart: (time) => {
       setIsRunning(true);
-      setIsStarted(true);
-    },
-    onStart: (time, elapsedTime, startTime) => {
-      setIsRunning(true);
+      console.log("started");
     },
     onTick: (time, elapsedTime, startTime) => {
       console.log("Tick!");
     },
-    onFinish: (time, elapsedTime, startTime) => {
+    onEnd: (time, elapsedTime, startTime) => {
       // call modal
 
       // on modal submit, execute this
@@ -65,46 +63,47 @@ function TimerContainer() {
       setIsStarted(false);
       next();
     },
-    onQuit: (time, elapsedTime, startTime) => {
-      // call modal
-
-      // on modal submit, execute this
-
-      setIsRunning(false);
-      setIsStarted(false);
-      next();
-    },
     onReset: (time, elapsedTime, startTime) => {
       console.log("Reset!");
       setIsRunning(false);
       setIsStarted(false);
     },
-    onStop: (time, elapsedTime, startTime) => {
+    onPause: (time, elapsedTime, startTime) => {
       console.log("Stopped!");
       setIsRunning(false);
     },
+    onResume: (time, elapsedTime, startTime) => {
+      console.log("resumed");
+      setIsRunning(true);
+    },
+
+    onTickEvents: [
+      {
+        time: new Date(10000),
+        callback: (time) => {
+          console.log("10sec mark! " + time);
+        },
+      },
+      {
+        time: new Date(4000),
+        callback: (time) => {
+          console.log("4sec mark! " + time);
+        },
+      },
+      {
+        time: new Date(3000),
+        callback: (time) => {
+          console.log("3sec mark! " + time);
+        },
+      },
+      {
+        time: new Date(9000),
+        callback: (time) => {
+          console.log("9sec mark! " + time);
+        },
+      },
+    ],
   };
-
-  const countdownEvents = [
-    {
-      // TODO: fix currentTimer being null initially
-      time: currentTimer ? currentTimer.duration : 10000,
-      callback: (time, elapsedTime, startTime) => {
-        console.log("event callback!");
-        /* if sound is enabled, play sound effect */
-        /* if overtime is not enabled, call finish callback here */
-      },
-    },
-  ];
-
-  const stopwatchEvents = [
-    {
-      time: currentTimer ? currentTimer.duration : 10000,
-      callback: () => {
-        /* if sound is enabled, play sound effect */
-      },
-    },
-  ];
 
   const timerByTypes = {
     countdown: (timer) => (
@@ -112,25 +111,24 @@ function TimerContainer() {
         duration={timer.duration === 1000 * 60 ? 5000 : timer.duration}
         callbacks={callbacks}
         overtime={false}
-        events={countdownEvents}
         viewConstructor={(props) => (
-          <CircularCountdownView
+          <CircularCountdownTimerView
             {...props}
             label={timer.label}
-          ></CircularCountdownView>
+          ></CircularCountdownTimerView>
         )}
       />
     ),
     stopwatch: (timer) => (
       <StopwatchTimer
-        minimumDuration={timer.duration === 1000 * 60 ? 5000 : timer.duration}
+        targetDuration={timer.duration === 1000 * 60 ? 5000 : timer.duration}
         callbacks={callbacks}
-        events={stopwatchEvents}
-        viewConstructor={(props: ITimerViewProps) => (
-          <CircularStopwatchTimerView
-            {...props}
+        viewConstructor={(hookProps) => (
+          <CircularStopwatchView
+            {...hookProps}
             label={timer.label}
-          ></CircularStopwatchTimerView>
+            clockwise={true}
+          ></CircularStopwatchView>
         )}
       />
     ),

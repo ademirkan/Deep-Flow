@@ -1,11 +1,12 @@
+import { Time } from "../Types/Time";
 import { TimerEvent } from "../Types/TimerEvent";
+
 export interface ITimerCallbacks {
-  onStart?: () => void;
-  onTick?: () => void;
-  onResume?: () => void;
-  onPause?: () => void;
-  onEnd?: () => void;
-  onRestart?: () => void;
-  onFinish?: () => void;
-  onTickEvents?: TimerEvent[];
+  onStart?: (currentTime: Time) => void; // first start
+  onTick?: (elapsedTime: Time, currentTime: Time, startTime: Time) => void; // each tick
+  onResume?: (elapsedTime: Time, currentTime: Time, startTime: Time) => void; // each resume
+  onPause?: (elapsedTime: Time, currentTime: Time, startTime: Time) => void; // each pause
+  onEnd?: (elapsedTime: Time, currentTime: Time, startTime: Time) => void; //
+  onReset?: (elapsedTime: Time, currentTime: Time, startTime: Time) => void;
+  onTickEvents?: Array<TimerEvent>;
 }

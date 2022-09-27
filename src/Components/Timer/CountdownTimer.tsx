@@ -1,8 +1,4 @@
-import CircularProgress from "../CircularProgress/CircularProgress";
-import useStopwatch from "../../Hooks/useStopwatch";
-import styles from "./CircularTimer.module.css";
-import ControlBar, { ControlButton } from "./ControlBar";
-import { formatTime } from "../../Helpers/formatTime";
+import useStopwatch from "../../Hooks/useStopwatch.tsx";
 
 export default function CountdownTimer({
   duration,
@@ -34,5 +30,5 @@ export default function CountdownTimer({
     finish();
   }
 
-  return <div className={styles.timerContainer}>{viewConstructor(props)}</div>;
+  return <div className="timerContainer">{viewConstructor(props)}</div>;
 }

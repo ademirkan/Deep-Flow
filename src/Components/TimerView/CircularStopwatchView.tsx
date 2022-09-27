@@ -1,30 +1,25 @@
 import React from "react";
 import CircularProgress from "../CircularProgress/CircularProgress";
+//@ts-ignore
 import styles from "./CircularTimerView.module.css";
-import { formatTime } from "./../../Helpers/formatTime";
+import { formatTime } from "../../Helpers/formatTime";
 import { FC } from "react";
 import { TimerView } from "../../Typescript/Types/TimerView";
 import { ITimerViewProps } from "../../Typescript/Interfaces/ITimerViewProps";
 import { ReactNode } from "react";
 
-interface ICircularStopwatchTimerViewProps extends ITimerViewProps {
-  /* 
-  targetTime: Time;
-  isRunning: boolean;
-  isStarted: boolean;
-  elapsedTime: Time;
-  onStart: () => void;
-  onPause: () => void;
-  onReset: () => void;
-  onFinish?: () => void;
-  label?: string; 
-  */
+// Props specific to CircularStopwatchView
+interface ICircularStopwatchViewConstructorProps {
   clockwise: boolean;
+  label: string;
 }
 
-export const CircularStopwatchTimerView: (
-  props: ICircularStopwatchTimerViewProps
-) => ReactNode = (props) => {
+// General ITimerViewProps + Unique construtor props
+interface ICircularStopwatchViewProps
+  extends ICircularStopwatchViewConstructorProps,
+    ITimerViewProps {}
+
+export const CircularStopwatchView = (props: ICircularStopwatchViewProps) => {
   const isFinishable = props.isRunning && props.elapsedTime >= props.targetTime;
 
   const button = !props.isStarted ? (
@@ -67,7 +62,7 @@ export const CircularStopwatchTimerView: (
           </span>
         </div>
         <TextTimer
-          seconds={props.elapsedTime}
+          time={props.elapsedTime}
           style={{ color: "var(--title-color)" }}
         />
         <div
@@ -81,10 +76,12 @@ export const CircularStopwatchTimerView: (
   );
 };
 
-function TextTimer({ seconds, style = {} }) {
+function TextTimer({ time, style = {} }) {
   return (
     <div className={styles.textTimer} style={style}>
-      {formatTime(seconds)}
+      {formatTime(time)}
     </div>
   );
 }
+
+export default CircularStopwatchView;
