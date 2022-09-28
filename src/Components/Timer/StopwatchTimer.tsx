@@ -1,4 +1,4 @@
-import useStopwatch from "../../Hooks/useStopwatch.tsx";
+import useStopwatch from "../../Hooks/useStopwatch";
 import React, { FC } from "react";
 import { ITimerViewProps } from "./../../Typescript/Interfaces/ITimerViewProps";
 import { ITimerProps } from "./../../Typescript/Interfaces/ITimerProps";
@@ -10,7 +10,7 @@ const StopwatchTimer = (props: ITimerProps) => {
     useStopwatch(props.callbacks);
 
   // props for stopwatch view constructor
-  const viewProps: ITimerViewProps = {
+  const hookProps: ITimerViewProps = {
     targetTime: props.targetDuration,
     isRunning,
     isStarted,
@@ -21,7 +21,7 @@ const StopwatchTimer = (props: ITimerProps) => {
     onFinish: finish,
   };
 
-  const timerView = props.viewConstructor({ ...viewProps });
+  const timerView = props.viewConstructor({ ...hookProps });
 
   return <div className="timerContainer">{timerView}</div>;
 };

@@ -2,7 +2,7 @@ import Progress from "../Components/ProgressBar/ProgressBar";
 import { useContext } from "react";
 import { SchedulerContext } from "../Contexts/SchedulerContext";
 import CountdownTimer from "../Components/Timer/CountdownTimer";
-import CircularCountdownTimerView from "../Components/TimerView/CircularCountdownTimerView";
+import CircularCountdownView from "../Components/TimerView/CircularCountdownView";
 import { TimerStateContext } from "../Contexts/TimerStateContext";
 import { SessionsContext } from "../Contexts/SessionsContext";
 import StopwatchTimer from "../Components/Timer/StopwatchTimer";
@@ -108,14 +108,15 @@ function Timer() {
   const timerByTypes = {
     countdown: (timer) => (
       <CountdownTimer
-        duration={timer.duration === 1000 * 60 ? 5000 : timer.duration}
+        targetDuration={timer.duration === 1000 * 60 ? 5000 : timer.duration}
         callbacks={callbacks}
         overtime={false}
         viewConstructor={(props) => (
-          <CircularCountdownTimerView
+          <CircularCountdownView
             {...props}
+            clockwise={true}
             label={timer.label}
-          ></CircularCountdownTimerView>
+          ></CircularCountdownView>
         )}
       />
     ),
@@ -127,7 +128,6 @@ function Timer() {
           <CircularStopwatchView
             {...hookProps}
             label={timer.label}
-            clockwise={true}
           ></CircularStopwatchView>
         )}
       />

@@ -1,21 +1,18 @@
 import React from "react";
 import CircularProgress from "../CircularProgress/CircularProgress";
 import styles from "./CircularTimerView.module.css";
-import { formatTime } from "../../Helpers/formatTime.ts";
+import { formatTime } from "../../Helpers/formatTime";
+import { ITimerViewProps } from "../../Typescript/Interfaces/ITimerViewProps";
 
-export default function CircularCountdownTimerView({
-  duration,
-  elapsedTime,
-  label = "",
-  clockwise = true,
-  onStart,
-  onStop,
-  onQuit,
-  onReset,
-  isRunning,
-  onFinish, // only used for overtime manual finish
-}) {
-  let remainingTime = duration - elapsedTime;
+interface ICircularCountdownViewProps extends ITimerViewProps {
+  clockwise: boolean;
+  label: string;
+}
+
+export default function CircularCountdownView(
+  props: ICircularCountdownViewProps
+) {
+  let remainingTime = props.targetTime.valueOf() - props.elapsedTime.valueOf();
 
   // calculate overtime duration
   let overtimeMs = 0;
@@ -25,38 +22,40 @@ export default function CircularCountdownTimerView({
 
   return (
     <>
-      {/* <CircularProgress
+      <CircularProgress
         filledPercent={
-          isRunning
-            ? (remainingTime - 900) / duration
-            : remainingTime / duration
+          props.isRunning
+            ? (remainingTime - 900) / props.targetTime.valueOf()
+            : remainingTime / props.targetTime.valueOf()
         }
         thickness={0.03}
-        animationDuration={isRunning ? "1s" : "0.15s"}
+        animationDuration={props.isRunning ? "1s" : "0.15s"}
       />
 
       <div id={styles.innerUI}>
         <div className="centered-container" style={{ gridArea: "label" }}>
           <span
             className={
-              styles.label + " " + (isRunning ? styles.hidden : styles.visible)
+              styles.label +
+              " " +
+              (props.isRunning ? styles.hidden : styles.visible)
             }
           >
-            {label}
+            {props.label}
           </span>
         </div>
         <TextTimer
-          seconds={remainingTime / 1000}
+          time={props.elapsedTime}
           style={{ color: "var(--title-color)" }}
         />
         {overtimeMs === 0 ? (
-          <ControlBar isRunning={isRunning}>
-            {!isRunning ? (
+          <ControlBar isRunning={props.isRunning}>
+            {!props.isRunning ? (
               <ControlButton
                 icon={
                   <i className="fa-solid centered-container fa-circle-play control-icon text-3xl " />
                 }
-                onClick={onStart}
+                onClick={props.onStart}
               />
             ) : overtimeMs === 0 ? (
               <>
@@ -64,19 +63,19 @@ export default function CircularCountdownTimerView({
                   icon={
                     <i className="fa-solid centered-container fa-clock-rotate-left control-icon" />
                   }
-                  onClick={onReset}
+                  onClick={props.onReset}
                 />
                 <ControlButton
                   icon={
                     <i className="fa-solid centered-container fa-circle-pause control-icon text-3xl" />
                   }
-                  onClick={onStop}
+                  onClick={props.onPause}
                 />
                 <ControlButton
                   icon={
                     <i className="fa-solid centered-container fa-circle-chevron-right control-icon"></i>
                   }
-                  onClick={onQuit}
+                  onClick={props.onFinish}
                 />
               </>
             ) : (
@@ -86,15 +85,32 @@ export default function CircularCountdownTimerView({
         ) : (
           <div className="button">yeet</div>
         )}
-      </div> */}
+      </div>
     </>
   );
 }
 
-function TextTimer({ seconds, style = {} }) {
+function TextTimer({ time, style = {} }) {
+  console.log(time);
   return (
     <div className={styles.textTimer} style={style}>
-      {formatTime(seconds)}
+      {formatTime(time)}
+    </div>
+  );
+}
+
+function ControlBar({ isRunning, children }) {
+  return (
+    <div id={styles.controlBar} className="flex justify-around h-16 ">
+      {children}
+    </div>
+  );
+}
+
+function ControlButton({ icon, onClick }) {
+  return (
+    <div className="control-button" onClick={onClick}>
+      {icon}
     </div>
   );
 }

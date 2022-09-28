@@ -3,14 +3,10 @@ import CircularProgress from "../CircularProgress/CircularProgress";
 //@ts-ignore
 import styles from "./CircularTimerView.module.css";
 import { formatTime } from "../../Helpers/formatTime";
-import { FC } from "react";
-import { TimerView } from "../../Typescript/Types/TimerView";
 import { ITimerViewProps } from "../../Typescript/Interfaces/ITimerViewProps";
-import { ReactNode } from "react";
 
 // Props specific to CircularStopwatchView
 interface ICircularStopwatchViewConstructorProps {
-  clockwise: boolean;
   label: string;
 }
 
