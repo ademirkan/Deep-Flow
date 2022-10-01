@@ -13,32 +13,14 @@ import { ITimerCallbacks } from "../Typescript/Interfaces/ITimerCallbacks";
 import React from "react";
 import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 import { TimerEvent } from "../Typescript/Types/TimerEvent";
+import { TimerSession } from "../Typescript/Types/TimerSession";
+import { TimerType } from "../Typescript/enums/TimerType";
 function TimerPage() {
-  // isRunning, isStarted
-  const { isRunning, isStarted } = useContext(TimerStateContext);
-
-  return (
-    <PageLayout
-      isRunning={isRunning}
-      actionArea={<Config isVisible={!isRunning} />}
-    >
-      <div
-        className="flex justify-center items-center flex-col mt-16"
-        style={{ gridArea: "main" }}
-      >
-        <Timer />
-        <Progress />
-      </div>
-    </PageLayout>
-  );
-}
-
-function Timer() {
-  // STATE
-  const { mode, currentTimer, next } = useContext(SchedulerContext).scheduler;
-  const { setIsRunning, setIsStarted } = useContext(TimerStateContext);
+  const { isRunning, setIsRunning, setIsStarted } =
+    useContext(TimerStateContext);
   const { sessions, setSessions } = useContext(SessionsContext);
-  //const thing = useMemo(()=>getThingFromExpensiveComputation(giantString), [giantString])
+
+  // Callbacks
   const callbacks: ITimerCallbacks = {
     onStart: (time) => {
       setIsRunning(true);
@@ -61,7 +43,7 @@ function Timer() {
       setSessions(prevSessions);
       setIsRunning(false);
       setIsStarted(false);
-      next();
+      // next();
     },
     onReset: (time, elapsedTime, startTime) => {
       console.log("Reset!");
@@ -105,40 +87,65 @@ function Timer() {
     ],
   };
 
+  return (
+    <PageLayout
+      isRunning={isRunning}
+      actionArea={<Config isVisible={!isRunning} />}
+    >
+      <div
+        className="flex justify-center items-center flex-col mt-16"
+        style={{ gridArea: "main" }}
+      >
+        <Timer
+          callbacks={callbacks}
+          timer={{
+            targetDuration: new Date(100000),
+            timerType: TimerType.countdown,
+            isBreak: false,
+          }}
+        />
+        <Progress />
+      </div>
+    </PageLayout>
+  );
+}
+
+interface ITimerContainerProps {
+  callbacks: ITimerCallbacks;
+  timer: TimerSession;
+}
+
+const Timer = (props: ITimerContainerProps) => {
   const timerByTypes = {
-    countdown: (timer) => (
+    countdown: (timer: TimerSession) => (
       <CountdownTimer
-        targetDuration={timer.duration === 1000 * 60 ? 5000 : timer.duration}
-        callbacks={callbacks}
+        targetDuration={timer.targetDuration}
+        callbacks={props.callbacks}
         overtime={false}
         viewConstructor={(props) => (
           <CircularCountdownView
             {...props}
             clockwise={true}
-            label={timer.label}
+            label={timer.isBreak ? "break" : "study"}
           ></CircularCountdownView>
         )}
       />
     ),
-    stopwatch: (timer) => (
+    stopwatch: (timer: TimerSession) => (
       <StopwatchTimer
-        targetDuration={timer.duration === 1000 * 60 ? 5000 : timer.duration}
-        callbacks={callbacks}
+        targetDuration={timer.targetDuration}
+        callbacks={props.callbacks}
         viewConstructor={(hookProps) => (
           <CircularStopwatchView
             {...hookProps}
-            label={timer.label}
+            label={timer.isBreak ? "break" : "study"}
           ></CircularStopwatchView>
         )}
       />
     ),
   };
 
-  return currentTimer ? (
-    timerByTypes[`${currentTimer.type}`](currentTimer)
-  ) : (
-    <div>error, please choose a timer mode</div>
-  );
-}
+  return timerByTypes[`${props.timer.timerType}`](props.timer);
+};
 
 export default TimerPage;

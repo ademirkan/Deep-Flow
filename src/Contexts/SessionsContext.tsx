@@ -1,8 +1,8 @@
-import react, { useState } from "react";
+import React, { useState } from "react";
 
-import useLocalStorageState from "./../Hooks/useLocalStorageState";
+import useLocalStorageState from "../Hooks/useLocalStorageState";
 
-export const SessionsContext = react.createContext({
+export const SessionsContext = React.createContext({
   sessions: [],
   setSessions: () => {},
 });
